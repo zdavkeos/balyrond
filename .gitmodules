@@ -1,0 +1,3 @@
+[submodule "src/PlotJuggler"]
+	path = src/PlotJuggler
+	url = http://github.com/facontidavide/PlotJuggler.git
