@@ -5,16 +5,19 @@ REM NOTE: Adjust vcpkg path accordingly
 set Qt5_DIR=C:\Qt\5.15.2\msvc2019_64
 
 REM Build PlotJuggler
-cmake -G "Visual Studio 16" -S .\src\PlotJuggler -B .\build\PlotJuggler -DCMAKE_TOOLCHAIN_FILE="C:\Users\zdavis\Documents\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_INSTALL_PREFIX=.\install\ 
+cmake -G "Visual Studio 16" -S .\src\PlotJuggler -B .\build\PlotJuggler -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_INSTALL_PREFIX=.\install\ 
 cmake --build  build/PlotJuggler --config RelWithDebInfo --target install --parallel
 
 REM Build plugins
 set plotjuggler_DIR=%~dp0install\lib\cmake\plotjuggler
-cmake -G "Visual Studio 16" -S .\src\balyrond-pj-plugins -B .\build\balyrond-pj-plugins -DCMAKE_TOOLCHAIN_FILE="C:\Users\zdavis\Documents\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_INSTALL_PREFIX=.\install\ 
+cmake -G "Visual Studio 16" -S .\src\balyrond-pj-plugins -B .\build\balyrond-pj-plugins -DCMAKE_TOOLCHAIN_FILE="C:\vcpkg\scripts\buildsystems\vcpkg.cmake" -DCMAKE_INSTALL_PREFIX=.\install\ 
 cmake --build  build/balyrond-pj-plugins --config RelWithDebInfo --target install --parallel
 
 REM Get all the Qt dll's and stuff
 C:\Qt\5.15.2\msvc2019_64\bin\windeployqt.exe --release --dir .\install\bin .\install\bin\plotjuggler.exe
+
+REM Don't forget this guy
+copy C:\Qt\5.15.2\msvc2019_64\bin\Qt5SerialPort.dll .\install\bin
 
 REM Probably a better way to do this...
 REM These come from vcpkg and cmake doesn't know to "install" them
