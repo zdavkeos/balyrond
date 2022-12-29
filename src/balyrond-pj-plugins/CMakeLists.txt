@@ -12,6 +12,11 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 
+if(APPLE AND EXISTS /opt/homebrew/opt/qt@5)
+    list(APPEND CMAKE_PREFIX_PATH "/opt/homebrew/opt/qt@5")
+    set(CMAKE_MACOSX_RPATH 1)
+endif()
+
 find_package(Qt5 REQUIRED COMPONENTS
     Widgets
     Xml
