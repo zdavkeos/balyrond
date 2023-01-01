@@ -33,11 +33,12 @@ bool DataStreamBalyrond::start(QStringList*)
     _params = dialog->getParams();
 
 
-    _port= new QSerialPort(this);
+    _port = new QSerialPort(this);
     // connect(_port, &QSerialPort::readyRead, this, &DataStreamBalyrond::process);
 
     _port->setPortName(_params.port);
     _port->setBaudRate(115200);
+    _port->setReadBufferSize(1024); // Breaks on mac os without this...?
     
     if (!_port->open(QIODevice::ReadOnly))
     {
@@ -65,7 +66,11 @@ void DataStreamBalyrond::shutdown()
 {
     if (_running)
     {
-        _port->close();
+        if (_port)
+        {
+            _port->close();
+        }
+
         _running = false;
     }
 }
@@ -97,30 +102,32 @@ bool DataStreamBalyrond::xmlLoadState(const QDomElement &parent_element)
 
 void DataStreamBalyrond::receiveLoop()
 {
-    double i = 0;
     while (_running)
     {
         try
         {
-            if (_port->waitForReadyRead())
+            if (_port->waitForReadyRead(1000))
             {
-                if (_port->canReadLine())
+                QByteArray data = _port->readLine();
+
+                using namespace std::chrono;
+                auto ts = high_resolution_clock::now().time_since_epoch();
+                double timestamp = 1e-6 * double(duration_cast<microseconds>(ts).count());
+
+                // qDebug() << data;
+
+                QString line = QString::fromUtf8(data);
+                auto parts = line.split(",");
+
+                if (parts.size() == 3)
                 {
-                    auto data = _port->readLine();
-
                     std::lock_guard<std::mutex> lock(mutex());
-
-                    QString line = QString::fromUtf8(data);
-                    auto parts = line.split(",");
-
-                    if (parts.size() == 3)
-                    {
-                        _input_data[0]->pushBack({i, parts[0].toDouble()});
-                        _input_data[1]->pushBack({i, parts[1].toDouble()});
-                        _input_data[2]->pushBack({i, parts[2].toDouble()});
-                        i += 1.0 / 500.0; // approx
-                    }
+                    _input_data[0]->pushBack({timestamp, parts[0].toDouble()});
+                    _input_data[1]->pushBack({timestamp, parts[1].toDouble()});
+                    _input_data[2]->pushBack({timestamp, parts[2].toDouble()});
                 }
+
+                emit this->dataReceived();
             }
         }
         catch (std::exception& err)
@@ -135,8 +142,6 @@ void DataStreamBalyrond::receiveLoop()
             emit closed();
             return;
         }
-
-        emit this->dataReceived();
     }
 }
 
