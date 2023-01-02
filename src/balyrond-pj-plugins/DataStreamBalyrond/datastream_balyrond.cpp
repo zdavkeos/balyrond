@@ -66,6 +66,13 @@ void DataStreamBalyrond::shutdown()
 {
     if (_running)
     {
+        _running = false;
+
+        if (_thread.joinable())
+        {
+            _thread.join();
+        }
+
         if (_port)
         {
             _port->close();
