@@ -113,7 +113,7 @@ void DataStreamBalyrond::receiveLoop()
     {
         try
         {
-            if (_port->waitForReadyRead(1000))
+            if (_port->waitForReadyRead(1)) // Windows hack, we shouldn't need such a timeout
             {
                 QByteArray data = _port->readLine();
 
