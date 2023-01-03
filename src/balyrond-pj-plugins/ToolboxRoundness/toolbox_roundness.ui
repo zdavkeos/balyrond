@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>toolbox_fft</class>
- <widget class="QWidget" name="toolbox_fft">
+ <class>toolbox_roundness</class>
+ <widget class="QWidget" name="toolbox_roundness">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -153,22 +153,6 @@
         <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;IMPORTANT&lt;/span&gt;: FFT expects data to be sampled with a constant dT.&lt;/p&gt;&lt;p&gt;If that is not the case, the results will be inaccurate.&lt;/p&gt;&lt;p&gt;This plugin will not apply any resampling to your data.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
          </property>
         </widget>
        </item>

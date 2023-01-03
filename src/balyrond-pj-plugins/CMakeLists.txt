@@ -31,8 +31,6 @@ include_directories(
     ${Qt5Xml_INCLUDE_DIRS}
     ${Qt5Svg_INCLUDE_DIRS}
     ${plotjuggler_INCLUDE_DIR}
-    parser
-    thirdparty
     )
 
 if(plotjuggler_FOUND)
@@ -74,10 +72,30 @@ add_library(DataStreamBalyrond SHARED
 target_link_libraries(DataStreamBalyrond PRIVATE
     ${PJ_LIBRARIES})
 
+include_directories(
+    # Hacky...
+    ../PlotJuggler/plotjuggler_base/src
+    ../PlotJuggler/3rdparty/qwt/src
+    )
+
+QT5_WRAP_UI ( BALYROND_UI_SRC  ToolboxRoundness/toolbox_roundness.ui  )
+#QT5_ADD_RESOURCES (RES_SRC  DataStreamBalyrond/icons.qrc )
+    
+add_library(ToolboxRoundness SHARED
+        ToolboxRoundness/toolbox_roundness.h
+        ToolboxRoundness/toolbox_roundness.cpp
+        ${BALYROND_UI_SRC}
+        ${RES_SRC}
+    )
+    
+target_link_libraries(ToolboxRoundness PRIVATE
+    ${PJ_LIBRARIES})
+
 #------- Install the libraries -------
 install(
     TARGETS
         DataStreamBalyrond
+        ToolboxRoundness
     DESTINATION bin )
 
 
