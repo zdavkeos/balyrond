@@ -46,7 +46,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>COM</string>
+        <string>Serial Port:</string>
        </property>
       </widget>
      </item>
@@ -58,6 +58,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="portsLabel">
+     <property name="text">
+      <string>Ports Found:</string>
+     </property>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">

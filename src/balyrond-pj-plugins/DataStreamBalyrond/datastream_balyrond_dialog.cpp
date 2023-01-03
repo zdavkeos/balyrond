@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QDir>
-
+#include <QSerialPortInfo>
 
 const QString DataStreamBalyrondDialog::prefix = "Balyrond::DataStreamBalyrond::";
 
@@ -24,8 +24,13 @@ DataStreamBalyrondDialog::DataStreamBalyrondDialog(QWidget *parent) :
 
     ui->lineEditPort->setText(port);
 
-    // ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(ui->lineEditFile->text().length() > 0 );
-    // ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+    QString txt("Ports Found:\n");
+    auto ports = QSerialPortInfo::availablePorts();
+    for (auto port : ports)
+    {
+        txt += "-  " + port.systemLocation() + "\n";
+    }
+    ui->portsLabel->setText(txt);
 
     restoreGeometry(settings.value(prefix + "geometry").toByteArray());
 }
