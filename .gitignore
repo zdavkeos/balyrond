@@ -35,3 +35,5 @@ build/
 install/
 .vs/
 
+# Mac bs
+.Ds_Store
