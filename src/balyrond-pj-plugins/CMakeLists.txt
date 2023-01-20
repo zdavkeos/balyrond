@@ -89,7 +89,10 @@ add_library(ToolboxRoundness SHARED
     )
     
 target_link_libraries(ToolboxRoundness PRIVATE
-    ${PJ_LIBRARIES})
+    ${PJ_LIBRARIES}
+    plotjuggler_base
+    #plotjuggler_qwt
+    )
 
 #------- Install the libraries -------
 install(

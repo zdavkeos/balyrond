@@ -1,6 +1,6 @@
 
 # Configure and Build PlotJuggler
-cmake -S src/PlotJuggler -B build/PlotJuggler -DCMAKE_INSTALL_PREFIX=install
+cmake -S src/PlotJuggler -B build/PlotJuggler -DCMAKE_INSTALL_PREFIX=install #-DBASE_AS_SHARED=ON
 cmake --build build/PlotJuggler --config RelWithDebInfo --parallel --target install
 
 # Configure and Build Balyrond Plugins
