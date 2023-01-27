@@ -58,7 +58,6 @@ private slots:
   void onDragEnterEvent(QDragEnterEvent* event);
   void onDropEvent(QDropEvent* event);
   void onViewResized(const QRectF& rect);
-  void onSaveCurve();
   void calculateRoundness();
   void onClearCurves();
 };

@@ -1,3 +1,4 @@
 [submodule "src/PlotJuggler"]
 	path = src/PlotJuggler
-	url = http://github.com/facontidavide/PlotJuggler.git
+	url = http://github.com/zdavkeos/PlotJuggler.git
+	branch = balyrond-fork

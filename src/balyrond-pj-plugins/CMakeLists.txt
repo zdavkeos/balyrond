@@ -22,7 +22,8 @@ find_package(Qt5 REQUIRED COMPONENTS
     Xml
     Svg
     SerialPort
-    OpenGL)
+    OpenGL
+    Concurrent)
 
 find_package(plotjuggler REQUIRED)
 
@@ -49,6 +50,7 @@ set( PJ_LIBRARIES
     Qt5::Xml
     Qt5::Svg
     Qt5::SerialPort
+    Qt5::Concurrent
     ${plotjuggler_LIBRARIES} )
 
 #--------------------------------------------------------
@@ -90,8 +92,7 @@ add_library(ToolboxRoundness SHARED
     
 target_link_libraries(ToolboxRoundness PRIVATE
     ${PJ_LIBRARIES}
-    plotjuggler_base
-    #plotjuggler_qwt
+    plotjuggler_qwt
     )
 
 #------- Install the libraries -------

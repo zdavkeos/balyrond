@@ -8,6 +8,8 @@
 #include <QDragEnterEvent>
 #include <QSettings>
 
+#include <qwt_polar_plot.h>
+
 #include "PlotJuggler/transform_function.h"
 #include "PlotJuggler/svg_util.h"
 
@@ -67,12 +69,19 @@ bool ToolboxRoundness::onShowWidget()
   QSettings settings;
   QString theme = settings.value("StyleSheet::theme", "light").toString();
 
-  // ui->pushButtonClear->setIcon(LoadSvg(":/resources/svg/clear.svg", theme));
   return true;
 }
 
 void ToolboxRoundness::calculateRoundness()
 {
+
+  auto plt = QwtPolarPlot(QwtText( "Polar Plot Demo" ), ui->framePlotPreviewB);
+  // QwtPolarCurve *curve = new QwtPolarCurve();
+  // curve->setStyle( QwtPolarCurve::Lines );
+
+  // auto data = QwtSeriesData<QwtPointPolar>();
+
+  // curve->setData(data);
 
 }
 
@@ -84,71 +93,68 @@ void ToolboxRoundness::onClearCurves()
   _plot_widget_B->removeAllCurves();
   _plot_widget_B->resetZoom();
 
-  ui->pushButtonSave->setEnabled(false);
   ui->pushButtonCalculate->setEnabled(false);
-
-  ui->lineEditSuffix->setEnabled(false);
-  ui->lineEditSuffix->setText("_Roundness");
 
   _curve_names.clear();
 }
 
 void ToolboxRoundness::onDragEnterEvent(QDragEnterEvent* event)
 {
-  // const QMimeData* mimeData = event->mimeData();
-  // QStringList mimeFormats = mimeData->formats();
+  const QMimeData* mimeData = event->mimeData();
+  QStringList mimeFormats = mimeData->formats();
 
-  // for (const QString& format : mimeFormats)
-  // {
-  //   QByteArray encoded = mimeData->data(format);
-  //   QDataStream stream(&encoded, QIODevice::ReadOnly);
+  for (const QString& format : mimeFormats)
+  {
+    QByteArray encoded = mimeData->data(format);
+    QDataStream stream(&encoded, QIODevice::ReadOnly);
 
-  //   if (format != "curveslist/add_curve")
-  //   {
-  //     return;
-  //   }
+    if (format != "curveslist/add_curve")
+    {
+      return;
+    }
 
-  //   QStringList curves;
-  //   while (!stream.atEnd())
-  //   {
-  //     QString curve_name;
-  //     stream >> curve_name;
-  //     if (!curve_name.isEmpty())
-  //     {
-  //       curves.push_back(curve_name);
-  //     }
-  //   }
-  //   _dragging_curves = curves;
-  //   event->accept();
-  // }
+    QStringList curves;
+    while (!stream.atEnd())
+    {
+      QString curve_name;
+      stream >> curve_name;
+      if (!curve_name.isEmpty())
+      {
+        curves.push_back(curve_name);
+      }
+    }
+    _dragging_curves = curves;
+    event->accept();
+  }
 }
 
 void ToolboxRoundness::onDropEvent(QDropEvent*)
 {
-  // _zoom_range.min = std::numeric_limits<double>::lowest();
-  // _zoom_range.max = std::numeric_limits<double>::max();
+  _zoom_range.min = std::numeric_limits<double>::lowest();
+  _zoom_range.max = std::numeric_limits<double>::max();
 
-  // for (auto& curve : _dragging_curves)
-  // {
-  //   std::string curve_id = curve.toStdString();
-  //   PlotData& curve_data = _plot_data->getOrCreateNumeric(curve_id);
+  for (auto& curve : _dragging_curves)
+  {
+    std::string curve_id = curve.toStdString();
+    PlotData& curve_data = _plot_data->getOrCreateNumeric(curve_id);
 
-  //   _plot_widget_A->addCurve(curve_id, curve_data);
-  //   _curve_names.push_back(curve_id);
-  //   _zoom_range.min = std::min(_zoom_range.min, curve_data.front().x);
-  //   _zoom_range.max = std::max(_zoom_range.max, curve_data.back().x);
-  // }
+    _plot_widget_A->addCurve(curve_id, curve_data);
+    _curve_names.push_back(curve_id);
+    _zoom_range.min = std::min(_zoom_range.min, curve_data.front().x);
+    _zoom_range.max = std::max(_zoom_range.max, curve_data.back().x);
+  }
 
-  // ui->pushButtonSave->setEnabled(true);
-  // ui->pushButtonCalculate->setEnabled(true);
-  // ui->lineEditSuffix->setEnabled(true);
+  if (_curve_names.size() > 1)
+  {
+    ui->pushButtonCalculate->setEnabled(true);
+  }
 
-  // _dragging_curves.clear();
-  // _plot_widget_A->resetZoom();
+  _dragging_curves.clear();
+  _plot_widget_A->resetZoom();
 }
 
 void ToolboxRoundness::onViewResized(const QRectF& rect)
 {
-  // _zoom_range.min = rect.left();
-  // _zoom_range.max = rect.right();
+  _zoom_range.min = rect.left();
+  _zoom_range.max = rect.right();
 }

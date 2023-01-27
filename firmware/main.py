@@ -25,7 +25,7 @@ while True:
     last_t = supervisor.ticks_ms()
     last_p = 0
     while time.monotonic() < (beg_t + 10.0):
-        angle = enc.position * deg_per_count
+        angle = (enc.position * deg_per_count) % 360.0
         dist = ain.value * volts_per_count
 
         t = supervisor.ticks_ms()
