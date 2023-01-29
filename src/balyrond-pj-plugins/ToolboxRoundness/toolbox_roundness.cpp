@@ -8,10 +8,112 @@
 #include <QDragEnterEvent>
 #include <QSettings>
 
-#include <qwt_polar_plot.h>
-
 #include "PlotJuggler/transform_function.h"
 #include "PlotJuggler/svg_util.h"
+
+#include <qwt_legend.h>
+#include <qwt_symbol.h>
+#include <qwt_polar_grid.h>
+#include <qwt_polar_curve.h>
+#include <qwt_polar_marker.h>
+#include <qwt_scale_engine.h>
+
+
+class PolarData: public QwtSeriesData<QwtPointPolar>
+{
+public:
+    PolarData( const QwtInterval &radialInterval,
+               const QwtInterval &azimuthInterval, size_t size ):
+        d_radialInterval( radialInterval ),
+        d_azimuthInterval( azimuthInterval ),
+        d_size( size )
+    {
+    }
+
+    virtual size_t size() const
+    {
+        return d_size;
+    }
+
+    virtual QwtPointPolar sample( size_t i ) const
+    {
+        const double stepA = 4 * d_azimuthInterval.width() / d_size;
+        const double a = d_azimuthInterval.minValue() + i * stepA;
+        
+        const double stepR = d_radialInterval.width() / d_size;
+        const double r = d_radialInterval.minValue() + i * stepR;
+        
+        return QwtPointPolar( a, r );
+    }
+
+    virtual QRectF boundingRect() const
+    {
+        // if ( d_boundingRect.width() < 0.0 )
+        //     d_boundingRect = qwtBoundingRect( *this );
+        
+        // return d_boundingRect;
+        return qwtBoundingRect( *this );
+    }
+
+protected:
+    QwtInterval d_radialInterval;
+    QwtInterval d_azimuthInterval;
+    size_t d_size;
+};
+
+const QwtInterval radialInterval( 0.0, 10.0 );
+const QwtInterval azimuthInterval( 0.0, 360.0 );
+
+class PPlot : public QwtPolarPlot
+{
+  public:
+  PPlot(QWidget* parent)
+  {
+        setAutoReplot( false );
+    setPlotBackground( Qt::white );
+
+    // scales
+    setScale( QwtPolar::Azimuth,
+        azimuthInterval.minValue(), azimuthInterval.maxValue(),
+        azimuthInterval.width() / 12 );
+
+    setScaleMaxMinor( QwtPolar::Azimuth, 2 );
+    setScale( QwtPolar::Radius,
+        radialInterval.minValue(), radialInterval.maxValue() );
+
+    // grids, axes
+
+    d_grid = new QwtPolarGrid();
+    d_grid->setPen( QPen( Qt::white ) );
+    for ( int scaleId = 0; scaleId < 1; scaleId++ )
+    {
+        d_grid->showGrid( scaleId );
+        d_grid->showMinorGrid( scaleId );
+
+        QPen minorPen( Qt::gray );
+#if 0
+        minorPen.setStyle( Qt::DotLine );
+#endif
+        d_grid->setMinorGridPen( scaleId, minorPen );
+    }
+    d_grid->setAxisPen( QwtPolar::AxisAzimuth, QPen( Qt::black ) );
+
+    d_grid->showAxis( QwtPolar::AxisAzimuth, true );
+    d_grid->showAxis( QwtPolar::AxisLeft, false );
+    d_grid->showAxis( QwtPolar::AxisRight, true );
+    d_grid->showAxis( QwtPolar::AxisTop, true );
+    d_grid->showAxis( QwtPolar::AxisBottom, false );
+    d_grid->showGrid( QwtPolar::Azimuth, true );
+    d_grid->showGrid( QwtPolar::Radius, true );
+    d_grid->attach( this );
+
+    QwtLegend *legend = new QwtLegend;
+    insertLegend( legend,  QwtPolarPlot::BottomLegend );
+  }
+
+  private:
+   QwtPolarGrid *d_grid;
+};
 
 ToolboxRoundness::ToolboxRoundness()
 {
@@ -39,7 +141,7 @@ void ToolboxRoundness::init(PJ::PlotDataMapRef& src_data, PJ::TransformsMap& tra
   _transforms = &transform_map;
 
   _plot_widget_A = new PJ::PlotWidgetBase(ui->framePlotPreviewA);
-  _plot_widget_B = new PJ::PlotWidgetBase(ui->framePlotPreviewB);
+  _plot_widget_B = new PPlot(ui->framePlotPreviewB);
 
   auto preview_layout_A = new QHBoxLayout(ui->framePlotPreviewA);
   preview_layout_A->setMargin(6);
@@ -50,6 +152,8 @@ void ToolboxRoundness::init(PJ::PlotDataMapRef& src_data, PJ::TransformsMap& tra
   preview_layout_B->addWidget(_plot_widget_B);
 
   _plot_widget_A->setAcceptDrops(true);
+
+  _plot_widget_B->setAutoReplot();
 
   connect(_plot_widget_A, &PlotWidgetBase::dragEnterSignal, this,
           &ToolboxRoundness::onDragEnterEvent);
@@ -74,14 +178,17 @@ bool ToolboxRoundness::onShowWidget()
 
 void ToolboxRoundness::calculateRoundness()
 {
+    QwtPolarCurve *curve = new QwtPolarCurve();
+    curve->setStyle( QwtPolarCurve::Lines );
 
-  auto plt = QwtPolarPlot(QwtText( "Polar Plot Demo" ), ui->framePlotPreviewB);
-  // QwtPolarCurve *curve = new QwtPolarCurve();
-  // curve->setStyle( QwtPolarCurve::Lines );
+    auto data = new PolarData(QwtInterval( 0.0, 10.0 ), QwtInterval( 0.0, 360.0 ), 1);
 
-  // auto data = QwtSeriesData<QwtPointPolar>();
+    curve->setData(data);
 
-  // curve->setData(data);
+    curve->attach(_plot_widget_B);
+
+    curve->setVisible(true);
+
 
 }
 
@@ -90,8 +197,8 @@ void ToolboxRoundness::onClearCurves()
   _plot_widget_A->removeAllCurves();
   _plot_widget_A->resetZoom();
 
-  _plot_widget_B->removeAllCurves();
-  _plot_widget_B->resetZoom();
+  // _plot_widget_B->removeAllCurves();
+  _plot_widget_B->unzoom();
 
   ui->pushButtonCalculate->setEnabled(false);
 
