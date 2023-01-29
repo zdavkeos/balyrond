@@ -34,11 +34,10 @@ bool DataStreamBalyrond::start(QStringList*)
 
 
     _port = new QSerialPort(this);
-    // connect(_port, &QSerialPort::readyRead, this, &DataStreamBalyrond::process);
+    connect(_port, &QSerialPort::readyRead, this, &DataStreamBalyrond::dataReady);
 
     _port->setPortName(_params.port);
-    _port->setBaudRate(115200);
-    _port->setReadBufferSize(1024); // Breaks on mac os without this...?
+    _port->setBaudRate(115200); // irrelevant for usb_cdc, but why not
     
     if (!_port->open(QIODevice::ReadOnly))
     {
@@ -55,7 +54,6 @@ bool DataStreamBalyrond::start(QStringList*)
     _input_data.emplace_back(&dataMap().getOrCreateNumeric("velocity"));
     
     _running = true;
-    _thread = std::thread([this]() { this->receiveLoop(); });
 
     dialog->deleteLater();
 
@@ -67,11 +65,6 @@ void DataStreamBalyrond::shutdown()
     if (_running)
     {
         _running = false;
-
-        if (_thread.joinable())
-        {
-            _thread.join();
-        }
 
         if (_port)
         {
@@ -107,48 +100,50 @@ bool DataStreamBalyrond::xmlLoadState(const QDomElement &parent_element)
     return true;
 }
 
-void DataStreamBalyrond::receiveLoop()
+void DataStreamBalyrond::dataReady()
 {
-    while (_running)
+    if (!_running)
     {
-        try
+        return;
+    }
+    
+    try
+    {
+        while (_port->canReadLine())
         {
-            if (_port->waitForReadyRead(1)) // Windows hack, we shouldn't need such a timeout
+            QByteArray data = _port->readLine();
+
+            using namespace std::chrono;
+            auto ts = high_resolution_clock::now().time_since_epoch();
+            double timestamp = 1e-6 * double(duration_cast<microseconds>(ts).count());
+
+            // qDebug() << data;
+
+            QString line = QString::fromUtf8(data);
+            auto parts = line.split(",");
+
+            if (parts.size() == 3)
             {
-                QByteArray data = _port->readLine();
-
-                using namespace std::chrono;
-                auto ts = high_resolution_clock::now().time_since_epoch();
-                double timestamp = 1e-6 * double(duration_cast<microseconds>(ts).count());
-
-                // qDebug() << data;
-
-                QString line = QString::fromUtf8(data);
-                auto parts = line.split(",");
-
-                if (parts.size() == 3)
-                {
-                    std::lock_guard<std::mutex> lock(mutex());
-                    _input_data[0]->pushBack({timestamp, parts[0].toDouble()});
-                    _input_data[1]->pushBack({timestamp, parts[1].toDouble()});
-                    _input_data[2]->pushBack({timestamp, parts[2].toDouble()});
-                }
-
-                emit this->dataReceived();
+                std::lock_guard<std::mutex> lock(mutex());
+                _input_data[0]->pushBack({timestamp, parts[0].toDouble()});
+                _input_data[1]->pushBack({timestamp, parts[1].toDouble()});
+                _input_data[2]->pushBack({timestamp, parts[2].toDouble()});
             }
-        }
-        catch (std::exception& err)
-        {
-            QMessageBox::warning(nullptr, tr("Balyrond Streaming Plugin"),
-                                 tr("Problem parsing message. Stopping.\n%1")
-                                 .arg(err.what()),
-                                 QMessageBox::Ok);
 
-            shutdown();
-            // notify the GUI
-            emit closed();
-            return;
+            emit this->dataReceived();
         }
+    }
+    catch (std::exception& err)
+    {
+        QMessageBox::warning(nullptr, tr("Balyrond Streaming Plugin"),
+                            tr("Problem parsing message. Stopping.\n%1")
+                            .arg(err.what()),
+                            QMessageBox::Ok);
+
+        shutdown();
+        // notify the GUI
+        emit closed();
+        return;
     }
 }
 

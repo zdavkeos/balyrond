@@ -46,13 +46,12 @@ public:
 
 private:
     bool _running = false;
-    std::thread _thread;
 
     QSerialPort* _port;
     DataStreamBalyrondDialog::Params _params;
 
     std::vector<PJ::PlotData*> _input_data;
 
-    void receiveLoop();
+    void dataReady();
 };
 
