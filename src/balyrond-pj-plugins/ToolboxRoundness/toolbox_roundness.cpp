@@ -11,110 +11,6 @@
 #include "PlotJuggler/transform_function.h"
 #include "PlotJuggler/svg_util.h"
 
-#include <qwt_legend.h>
-#include <qwt_symbol.h>
-#include <qwt_polar_grid.h>
-#include <qwt_polar_curve.h>
-#include <qwt_polar_marker.h>
-#include <qwt_scale_engine.h>
-
-
-class PolarData: public QwtSeriesData<QwtPointPolar>
-{
-public:
-    PolarData( const QwtInterval &radialInterval,
-               const QwtInterval &azimuthInterval, size_t size ):
-        d_radialInterval( radialInterval ),
-        d_azimuthInterval( azimuthInterval ),
-        d_size( size )
-    {
-    }
-
-    virtual size_t size() const
-    {
-        return d_size;
-    }
-
-    virtual QwtPointPolar sample( size_t i ) const
-    {
-        const double stepA = 4 * d_azimuthInterval.width() / d_size;
-        const double a = d_azimuthInterval.minValue() + i * stepA;
-        
-        const double stepR = d_radialInterval.width() / d_size;
-        const double r = d_radialInterval.minValue() + i * stepR;
-        
-        return QwtPointPolar( a, r );
-    }
-
-    virtual QRectF boundingRect() const
-    {
-        // if ( d_boundingRect.width() < 0.0 )
-        //     d_boundingRect = qwtBoundingRect( *this );
-        
-        // return d_boundingRect;
-        return qwtBoundingRect( *this );
-    }
-
-protected:
-    QwtInterval d_radialInterval;
-    QwtInterval d_azimuthInterval;
-    size_t d_size;
-};
-
-const QwtInterval radialInterval( 0.0, 10.0 );
-const QwtInterval azimuthInterval( 0.0, 360.0 );
-
-class PPlot : public QwtPolarPlot
-{
-  public:
-  PPlot(QWidget* parent)
-  {
-        setAutoReplot( false );
-    setPlotBackground( Qt::white );
-
-    // scales
-    setScale( QwtPolar::Azimuth,
-        azimuthInterval.minValue(), azimuthInterval.maxValue(),
-        azimuthInterval.width() / 12 );
-
-    setScaleMaxMinor( QwtPolar::Azimuth, 2 );
-    setScale( QwtPolar::Radius,
-        radialInterval.minValue(), radialInterval.maxValue() );
-
-    // grids, axes
-
-    d_grid = new QwtPolarGrid();
-    d_grid->setPen( QPen( Qt::white ) );
-    for ( int scaleId = 0; scaleId < 1; scaleId++ )
-    {
-        d_grid->showGrid( scaleId );
-        d_grid->showMinorGrid( scaleId );
-
-        QPen minorPen( Qt::gray );
-#if 0
-        minorPen.setStyle( Qt::DotLine );
-#endif
-        d_grid->setMinorGridPen( scaleId, minorPen );
-    }
-    d_grid->setAxisPen( QwtPolar::AxisAzimuth, QPen( Qt::black ) );
-
-    d_grid->showAxis( QwtPolar::AxisAzimuth, true );
-    d_grid->showAxis( QwtPolar::AxisLeft, false );
-    d_grid->showAxis( QwtPolar::AxisRight, true );
-    d_grid->showAxis( QwtPolar::AxisTop, true );
-    d_grid->showAxis( QwtPolar::AxisBottom, false );
-    d_grid->showGrid( QwtPolar::Azimuth, true );
-    d_grid->showGrid( QwtPolar::Radius, true );
-    d_grid->attach( this );
-
-    QwtLegend *legend = new QwtLegend;
-    insertLegend( legend,  QwtPolarPlot::BottomLegend );
-  }
-
-  private:
-   QwtPolarGrid *d_grid;
-};
-
 ToolboxRoundness::ToolboxRoundness()
 {
   _widget = new QWidget(nullptr);
@@ -141,7 +37,7 @@ void ToolboxRoundness::init(PJ::PlotDataMapRef& src_data, PJ::TransformsMap& tra
   _transforms = &transform_map;
 
   _plot_widget_A = new PJ::PlotWidgetBase(ui->framePlotPreviewA);
-  _plot_widget_B = new PPlot(ui->framePlotPreviewB);
+  _plot_widget_B = new PJ::PlotWidgetBase(ui->framePlotPreviewB);
 
   auto preview_layout_A = new QHBoxLayout(ui->framePlotPreviewA);
   preview_layout_A->setMargin(6);
@@ -152,8 +48,11 @@ void ToolboxRoundness::init(PJ::PlotDataMapRef& src_data, PJ::TransformsMap& tra
   preview_layout_B->addWidget(_plot_widget_B);
 
   _plot_widget_A->setAcceptDrops(true);
+  _plot_widget_B->setAcceptDrops(false);
 
-  _plot_widget_B->setAutoReplot();
+  _plot_widget_B->setModeXY(true);
+  _plot_widget_B->setKeepRatioXY(true);
+  // _plot_widget_B->changeCurvesStyle(PlotWidgetBase::DOTS);
 
   connect(_plot_widget_A, &PlotWidgetBase::dragEnterSignal, this,
           &ToolboxRoundness::onDragEnterEvent);
@@ -161,6 +60,7 @@ void ToolboxRoundness::init(PJ::PlotDataMapRef& src_data, PJ::TransformsMap& tra
   connect(_plot_widget_A, &PlotWidgetBase::dropSignal, this, &ToolboxRoundness::onDropEvent);
 
   connect(_plot_widget_A, &PlotWidgetBase::viewResized, this, &ToolboxRoundness::onViewResized);
+
 }
 
 std::pair<QWidget*, PJ::ToolboxPlugin::WidgetType> ToolboxRoundness::providedWidget() const
@@ -178,18 +78,74 @@ bool ToolboxRoundness::onShowWidget()
 
 void ToolboxRoundness::calculateRoundness()
 {
-    QwtPolarCurve *curve = new QwtPolarCurve();
-    curve->setStyle( QwtPolarCurve::Lines );
+    _plot_widget_B->removeAllCurves();
 
-    auto data = new PolarData(QwtInterval( 0.0, 10.0 ), QwtInterval( 0.0, 360.0 ), 1);
+    auto it = _plot_data->numeric.find("angle");
+    if (it == _plot_data->numeric.end())
+    {
+        QMessageBox::warning(nullptr, tr("Didn't find 'angle'"),
+                             QString("Couldn't angle"),
+                             QMessageBox::Ok);
+        return;
+    }
+    PlotData& angle_data = it->second;
 
-    curve->setData(data);
+    it = _plot_data->numeric.find("distance");
+    if (it == _plot_data->numeric.end())
+    {
+        QMessageBox::warning(nullptr, tr("Didn't find 'distance'"),
+                             QString("Couldn't distance"),
+                             QMessageBox::Ok);
+        return;
+    }
+    PlotData& dist_data = it->second;
 
-    curve->attach(_plot_widget_B);
+    std::cout << "angle len: " << angle_data.size() << "\n";
+    std::cout << "dist len: " << dist_data.size() << "\n";
 
-    curve->setVisible(true);
+    size_t min_index = 0;
+    size_t max_index = angle_data.size() - 1;
 
+    if (ui->radioZoomed->isChecked())
+    {
+        min_index = angle_data.getIndexFromX(_zoom_range.min);
+        max_index = angle_data.getIndexFromX(_zoom_range.max);
+    }
 
+    auto& curve_dist = _local_data.getOrCreateScatterXY("distance_polar");
+    curve_dist.clear();
+
+    auto& curve_avg = _local_data.getOrCreateScatterXY("average_polar");
+    curve_avg.clear();
+
+    double avg = 0;
+    for (size_t i = min_index; i < max_index; i++)
+    {
+        const auto& a = angle_data[i].y * (M_PI / 180.0);
+        const auto& d = dist_data[i].y;
+        avg += d;
+        curve_dist.pushBack({ d * ::cos(a), d * ::sin(a) });
+    }
+
+    avg /= (max_index - min_index);
+
+    std::cout << "Average: " << avg << "\n";
+
+    for (double a = 0.0; a <= (2*M_PI); a += .1)
+    {
+        curve_avg.pushBack({ avg * ::cos(a), avg * ::sin(a) });
+    }
+
+    QColor color = Qt::transparent;
+    auto colorHint = dist_data.attribute(COLOR_HINT);
+    if (colorHint.isValid())
+    {
+        color = colorHint.value<QColor>();
+    }
+
+    _plot_widget_B->addCurve("distance_polar", curve_dist, color);
+    _plot_widget_B->addCurve("average_polar", curve_avg);
+    _plot_widget_B->resetZoom();
 }
 
 void ToolboxRoundness::onClearCurves()
@@ -197,8 +153,8 @@ void ToolboxRoundness::onClearCurves()
   _plot_widget_A->removeAllCurves();
   _plot_widget_A->resetZoom();
 
-  // _plot_widget_B->removeAllCurves();
-  _plot_widget_B->unzoom();
+  _plot_widget_B->removeAllCurves();
+  _plot_widget_B->resetZoom();
 
   ui->pushButtonCalculate->setEnabled(false);
 

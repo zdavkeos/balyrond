@@ -1,0 +1,20 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 798e3442..a583bd82 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -291,6 +291,15 @@ install(
+      RUNTIME DESTINATION bin
+      INCLUDES DESTINATION include)
+ 
++install(
++    TARGETS
++        plotjuggler_qwt
++    EXPORT ${PROJECT_NAME}Targets
++    LIBRARY DESTINATION lib
++    ARCHIVE DESTINATION lib
++    RUNTIME DESTINATION bin
++    INCLUDES DESTINATION include)
++
+ install(DIRECTORY plotjuggler_base/include/ DESTINATION include )
+ 
+ export(PACKAGE ${PROJECT_NAME})

@@ -5,8 +5,6 @@
 #include "PlotJuggler/toolbox_base.h"
 #include "PlotJuggler/plotwidget_base.h"
 
-#include <qwt_polar_plot.h>
-
 namespace Ui
 {
 class toolbox_roundness;
@@ -44,7 +42,7 @@ private:
   QStringList _dragging_curves;
 
   PJ::PlotWidgetBase* _plot_widget_A = nullptr;
-  QwtPolarPlot*       _plot_widget_B = nullptr;
+  PJ::PlotWidgetBase* _plot_widget_B = nullptr;
 
   PJ::PlotDataMapRef* _plot_data = nullptr;
   PJ::TransformsMap* _transforms = nullptr;
