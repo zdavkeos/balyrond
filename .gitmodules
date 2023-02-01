@@ -1,7 +1,3 @@
-[submodule "src/PlotJuggler"]
-	path = src/PlotJuggler
-	url = http://github.com/zdavkeos/PlotJuggler.git
-	branch = balyrond-fork
 [submodule "firmware/spc_2040/pico-sdk"]
 	path = firmware/spc_2040/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk
