@@ -7,9 +7,9 @@
 
 #include <pico/stdlib.h>
 
-#define SPC_NREQ 1
-#define SPC_CLK  2
-#define SPC_DATA 3
+#define SPC_NREQ 2
+#define SPC_CLK  6
+#define SPC_DATA 7
 
 void spc_init()
 {
@@ -18,8 +18,12 @@ void spc_init()
     gpio_init(SPC_DATA);
 
     gpio_set_dir(SPC_NREQ, GPIO_OUT);
+    gpio_put(SPC_NREQ, 1);
+
     gpio_set_dir(SPC_CLK,  GPIO_IN);
+    gpio_pull_up(SPC_CLK);
     gpio_set_dir(SPC_DATA, GPIO_IN);
+    gpio_pull_up(SPC_DATA);
 }
 
 float
@@ -29,16 +33,27 @@ spc_read()
 
     gpio_put(SPC_NREQ, 0);
 
+    uint32_t clock_inactive_count = 0;
     for (uint8_t nib = 0; nib < 13; nib++)
     {
         uint8_t nibble = 0;
         for (uint8_t bit = 0; bit < 8; bit++)
         {
-            while (gpio_get(SPC_CLK) == 0) {} // Wait for clock high
+            while (gpio_get(SPC_CLK) == 0) {
+                                if (clock_inactive_count++ > 650000) {
+                                                
+                    return -1.0;
+                }
+            } // Wait for clock high
 
-            gpio_put(SPC_NREQ, 1);
+            //gpio_put(SPC_NREQ, 1);
+             clock_inactive_count = 0;
 
-            while (gpio_get(SPC_CLK) == 1) {} // Wait for falling edge
+            while (gpio_get(SPC_CLK) == 1) {
+                if (clock_inactive_count++ > 65000) {
+                    return -1.0;
+                }
+            } // Wait for falling edge
 
             if (gpio_get(SPC_DATA))
             {
@@ -78,9 +93,30 @@ int main(void)
 
     spc_init();
 
+    printf("H1\n");
+    gpio_put(SPC_NREQ, 0);
+    sleep_ms(1000);
+        printf("H2\n");
+        gpio_put(SPC_NREQ, 1);
+    sleep_ms(1000);
+        printf("H3\n");
+        gpio_put(SPC_NREQ, 0);
+    sleep_ms(1000);
+        printf("H4\n");
+        gpio_put(SPC_NREQ, 1);
+    sleep_ms(1000);
+        printf("H5\n");
+        gpio_put(SPC_NREQ, 0);
+    sleep_ms(1000);
+        printf("H6\n");
+        gpio_put(SPC_NREQ, 1);
+    sleep_ms(1000);
+    gpio_put(SPC_NREQ, 1);
+
     while (true)
     {
         printf("%f\n", spc_read());
+        gpio_put(SPC_NREQ, 1);
         sleep_ms(1000);
     }
 
