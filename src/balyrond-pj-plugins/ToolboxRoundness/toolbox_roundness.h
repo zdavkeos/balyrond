@@ -60,4 +60,5 @@ private slots:
   void onViewResized(const QRectF& rect);
   void calculateRoundness();
   void onClearCurves();
+  void formatToggle();
 };

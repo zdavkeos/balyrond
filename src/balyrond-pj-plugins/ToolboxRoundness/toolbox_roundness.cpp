@@ -11,6 +11,8 @@
 #include "PlotJuggler/transform_function.h"
 #include "PlotJuggler/svg_util.h"
 
+#include <limits>
+
 ToolboxRoundness::ToolboxRoundness()
 {
   _widget = new QWidget(nullptr);
@@ -24,6 +26,9 @@ ToolboxRoundness::ToolboxRoundness()
           &ToolboxRoundness::calculateRoundness);
 
   connect(ui->pushButtonClear, &QPushButton::clicked, this, &ToolboxRoundness::onClearCurves);
+
+  connect(ui->radioButtonLines, &QRadioButton::toggled, this, &ToolboxRoundness::formatToggle);
+  connect(ui->radioButtonDots, &QRadioButton::toggled, this, &ToolboxRoundness::formatToggle);
 }
 
 ToolboxRoundness::~ToolboxRoundness()
@@ -52,7 +57,6 @@ void ToolboxRoundness::init(PJ::PlotDataMapRef& src_data, PJ::TransformsMap& tra
 
   _plot_widget_B->setModeXY(true);
   _plot_widget_B->setKeepRatioXY(true);
-  // _plot_widget_B->changeCurvesStyle(PlotWidgetBase::DOTS);
 
   connect(_plot_widget_A, &PlotWidgetBase::dragEnterSignal, this,
           &ToolboxRoundness::onDragEnterEvent);
@@ -100,9 +104,6 @@ void ToolboxRoundness::calculateRoundness()
     }
     PlotData& dist_data = it->second;
 
-    std::cout << "angle len: " << angle_data.size() << "\n";
-    std::cout << "dist len: " << dist_data.size() << "\n";
-
     size_t min_index = 0;
     size_t max_index = angle_data.size() - 1;
 
@@ -118,21 +119,31 @@ void ToolboxRoundness::calculateRoundness()
     auto& curve_avg = _local_data.getOrCreateScatterXY("average_polar");
     curve_avg.clear();
 
+    auto& curve_min = _local_data.getOrCreateScatterXY("min_polar");
+    curve_min.clear();
+
+    auto& curve_max = _local_data.getOrCreateScatterXY("max_polar");
+    curve_max.clear();
+
+    double min = std::numeric_limits<double>::max();
+    double max = std::numeric_limits<double>::min();
     double avg = 0;
+    size_t t = 1;
     for (size_t i = min_index; i < max_index; i++)
     {
+        min = dist_data[i].y < min ? dist_data[i].y : min;
+        max = dist_data[i].y > max ? dist_data[i].y : max;
+
         const auto& a = angle_data[i].y * (M_PI / 180.0);
         const auto& d = dist_data[i].y;
-        avg += d;
+        avg += (d - avg) / t++;
         curve_dist.pushBack({ d * ::cos(a), d * ::sin(a) });
     }
 
-    avg /= (max_index - min_index);
-
-    std::cout << "Average: " << avg << "\n";
-
     for (double a = 0.0; a <= (2*M_PI); a += .1)
     {
+        curve_min.pushBack({ min * ::cos(a), min * ::sin(a) });
+        curve_max.pushBack({ max * ::cos(a), max * ::sin(a) });
         curve_avg.pushBack({ avg * ::cos(a), avg * ::sin(a) });
     }
 
@@ -144,6 +155,8 @@ void ToolboxRoundness::calculateRoundness()
     }
 
     _plot_widget_B->addCurve("distance_polar", curve_dist, color);
+    _plot_widget_B->addCurve("min_polar", curve_min);
+    _plot_widget_B->addCurve("max_polar", curve_max);
     _plot_widget_B->addCurve("average_polar", curve_avg);
     _plot_widget_B->resetZoom();
 }
@@ -220,4 +233,17 @@ void ToolboxRoundness::onViewResized(const QRectF& rect)
 {
   _zoom_range.min = rect.left();
   _zoom_range.max = rect.right();
+}
+
+void ToolboxRoundness::formatToggle()
+{
+    if (_plot_widget_B)
+    {
+        if (ui->radioButtonDots->isChecked())
+        {
+            _plot_widget_B->changeCurvesStyle(PlotWidgetBase::DOTS);
+        } else {
+            _plot_widget_B->changeCurvesStyle(PlotWidgetBase::LINES);
+        }
+    }
 }
