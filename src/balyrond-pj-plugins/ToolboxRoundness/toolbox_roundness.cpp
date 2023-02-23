@@ -154,6 +154,10 @@ void ToolboxRoundness::calculateRoundness()
         color = colorHint.value<QColor>();
     }
 
+    ui->label_min->setText(QString::number(min));
+    ui->label_max->setText(QString::number(max));
+    ui->label_avg->setText(QString::number(avg));
+
     _plot_widget_B->addCurve("distance_polar", curve_dist, color);
     _plot_widget_B->addCurve("min_polar", curve_min);
     _plot_widget_B->addCurve("max_polar", curve_max);

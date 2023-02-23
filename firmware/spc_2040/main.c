@@ -7,9 +7,13 @@
 
 #include <pico/stdlib.h>
 
+#include "quadrature_encoder.pio.h"
+
 #define SPC_NREQ 2
 #define SPC_CLK  6
 #define SPC_DATA 7
+
+float deg_per_count = 360.0 / 1024.0;
 
 void spc_init()
 {
@@ -94,10 +98,22 @@ int main(void)
 
     spc_init();
 
+
+    PIO pio = pio0;
+    const uint sm = 0;
+    uint offset = pio_add_program(pio, &quadrature_encoder_program);
+    quadrature_encoder_program_init(pio, sm, offset, D9, 0);
+
+    int last_count = 0;
+
     while (true)
     {
-        printf("%f\n", spc_read());
-        sleep_ms(10);
+        float dist = spc_read();
+
+        int counts = quadrature_encoder_get_count(pio, sm);
+        int delta = counts - last_count;
+
+        printf("%3.3f,0.3f,0.2f\n", counts * deg_per_count, dist, 0.0f);
     }
 
     return 0;
