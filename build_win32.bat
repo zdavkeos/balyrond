@@ -33,6 +33,13 @@ copy .\build\balyrond-pj-plugins\RelWithDebInfo\lz4.dll .\install\bin
 REM Don't need .lib files in distro
 del .\install\bin\*.lib
 
+REM Supplemental files
+copy .\README.md .\install\bin
+copy .\LICENSE .\install\bin
+copy .\test\balyrond_sample_data.csv .\install\bin
+copy .\firmware\main.py .\install\bin
+copy .\firmware\adafruit-circuitpython-seeeduino_xiao-en_US-7.3.3.uf2 .\install\bin
+
 REM Windows installer
 REM rmdir /S /Q .\installer\io.plotjuggler.application\data
 REM xcopy .\install\bin\*.* .\installer\io.plotjuggler.application\data /Y /S /f /z
