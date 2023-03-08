@@ -8,6 +8,8 @@
 #include <QDragEnterEvent>
 #include <QSettings>
 
+#include <Eigen/Dense>
+
 #include "PlotJuggler/transform_function.h"
 #include "PlotJuggler/svg_util.h"
 
@@ -250,4 +252,15 @@ void ToolboxRoundness::formatToggle()
             _plot_widget_B->changeCurvesStyle(PlotWidgetBase::LINES);
         }
     }
+}
+
+std::tuple<double, double, double>
+ToolboxRoundness::leastSquaresCircleFit()
+{
+
+    Eigen::MatrixXf A = Eigen::MatrixXf::Random(5, 3);
+    Eigen::VectorXf b = Eigen::VectorXf::Random(5);
+    auto sol =  A.colPivHouseholderQr().solve(b);
+
+    return std::make_tuple(1, 2, 3);
 }

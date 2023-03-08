@@ -53,12 +53,16 @@ private:
 
   std::vector<std::string> _curve_names;
 
+  void calculateRoundness();
+
+  std::tuple<double, double, double>
+  leastSquaresCircleFit();
+
 private slots:
 
   void onDragEnterEvent(QDragEnterEvent* event);
   void onDropEvent(QDropEvent* event);
   void onViewResized(const QRectF& rect);
-  void calculateRoundness();
   void onClearCurves();
   void formatToggle();
 };

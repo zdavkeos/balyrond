@@ -57,6 +57,10 @@ set( PJ_LIBRARIES
 
 include_directories(${plotjuggler_INCLUDE_DIR})
 
+# 3rd parts
+
+include_directories(ToolboxRoundness/eigen-3.4.0)
+
 #------- Create the libraries -------
 
 QT5_WRAP_UI ( BALYROND_UI_SRC  DataStreamBalyrond/datastream_balyrond_dialog.ui  )
