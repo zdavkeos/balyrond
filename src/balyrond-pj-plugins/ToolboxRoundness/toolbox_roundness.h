@@ -53,10 +53,16 @@ private:
 
   std::vector<std::string> _curve_names;
 
+  PJ::PlotDataXY& curve_dist;
+  PJ::PlotDataXY& curve_min;
+  PJ::PlotDataXY& curve_max;
+  PJ::PlotDataXY& curve_avg;
+  PJ::PlotDataXY& curve_lstsq;
+
   void calculateRoundness();
 
   std::tuple<double, double, double>
-  leastSquaresCircleFit();
+  leastSquaresCircleFit(std::vector<std::tuple<double, double>> data);
 
 private slots:
 
@@ -65,4 +71,5 @@ private slots:
   void onViewResized(const QRectF& rect);
   void onClearCurves();
   void formatToggle();
+  void curvesToggled();
 };

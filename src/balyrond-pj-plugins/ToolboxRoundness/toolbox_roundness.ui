@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1079</width>
-    <height>756</height>
+    <height>785</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -256,7 +256,7 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0">
+      <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0,0,0,0">
        <property name="sizeConstraint">
         <enum>QLayout::SetMinimumSize</enum>
        </property>
@@ -323,6 +323,55 @@
         </widget>
        </item>
        <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>Show Curves:</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QCheckBox" name="checkBox_MCC">
+            <property name="text">
+             <string>Minimum Circumscribed Circle</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_MIC">
+            <property name="text">
+             <string>Maximum Inscribed Circle</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_mean">
+            <property name="text">
+             <string>Mean Circle</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_lsc">
+            <property name="text">
+             <string>Least Squares Circle</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -355,7 +404,7 @@
            <item>
             <widget class="QLabel" name="label_8">
              <property name="text">
-              <string>Minimum</string>
+              <string>Maximum Inscribed Circle Diameter</string>
              </property>
             </widget>
            </item>
@@ -379,7 +428,7 @@
            <item>
             <widget class="QLabel" name="label_9">
              <property name="text">
-              <string>Maximum</string>
+              <string>Minimum Circumscribed Circle Diameter</string>
              </property>
             </widget>
            </item>
@@ -406,12 +455,48 @@
            <item>
             <widget class="QLabel" name="label_10">
              <property name="text">
-              <string>Average</string>
+              <string>Mean Circle Diameter</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QLabel" name="label_avg">
+             <property name="text">
+              <string>0</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <property name="spacing">
+            <number>-1</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_123">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="text">
+              <string>Least Squares Circle Center</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_center">
              <property name="text">
               <string>0</string>
              </property>

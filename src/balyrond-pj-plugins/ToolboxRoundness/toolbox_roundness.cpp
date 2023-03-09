@@ -15,7 +15,12 @@
 
 #include <limits>
 
-ToolboxRoundness::ToolboxRoundness()
+ToolboxRoundness::ToolboxRoundness() :
+  curve_dist(_local_data.getOrCreateScatterXY("distance_polar")),
+  curve_avg(_local_data.getOrCreateScatterXY("average_polar")),
+  curve_min(_local_data.getOrCreateScatterXY("min_polar")),
+  curve_max(_local_data.getOrCreateScatterXY("max_polar")),
+  curve_lstsq(_local_data.getOrCreateScatterXY("least_squares"))
 {
   _widget = new QWidget(nullptr);
   ui = new Ui::toolbox_roundness;
@@ -31,6 +36,11 @@ ToolboxRoundness::ToolboxRoundness()
 
   connect(ui->radioButtonLines, &QRadioButton::toggled, this, &ToolboxRoundness::formatToggle);
   connect(ui->radioButtonDots, &QRadioButton::toggled, this, &ToolboxRoundness::formatToggle);
+
+  connect(ui->checkBox_MCC, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
+  connect(ui->checkBox_MIC, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
+  connect(ui->checkBox_mean, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
+  connect(ui->checkBox_lsc, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
 }
 
 ToolboxRoundness::~ToolboxRoundness()
@@ -115,31 +125,44 @@ void ToolboxRoundness::calculateRoundness()
         max_index = angle_data.getIndexFromX(_zoom_range.max);
     }
 
-    auto& curve_dist = _local_data.getOrCreateScatterXY("distance_polar");
     curve_dist.clear();
-
-    auto& curve_avg = _local_data.getOrCreateScatterXY("average_polar");
     curve_avg.clear();
-
-    auto& curve_min = _local_data.getOrCreateScatterXY("min_polar");
     curve_min.clear();
-
-    auto& curve_max = _local_data.getOrCreateScatterXY("max_polar");
     curve_max.clear();
+    curve_lstsq.clear();
 
+    std::vector<std::tuple<double, double>> asdf;
+    for (size_t i = min_index; i <= max_index; i++)
+    {
+        const auto& a = angle_data[i].y * (M_PI / 180.0);
+        const auto& d = dist_data[i].y;
+
+        double x = d * ::cos(a);
+        double y = d * ::sin(a);
+        curve_dist.pushBack({ x, y });
+        asdf.push_back({ x, y });
+    }
+
+    auto lsqf = leastSquaresCircleFit(asdf);
+    double xc = std::get<0>(lsqf);
+    double yc = std::get<1>(lsqf);
+    double r = std::get<2>(lsqf);
+
+    // now that we know the true center,
+    // we can find the min and max circles
     double min = std::numeric_limits<double>::max();
     double max = std::numeric_limits<double>::min();
     double avg = 0;
     size_t t = 1;
-    for (size_t i = min_index; i < max_index; i++)
+    for (size_t i = 0; i < curve_dist.size(); i++)
     {
-        min = dist_data[i].y < min ? dist_data[i].y : min;
-        max = dist_data[i].y > max ? dist_data[i].y : max;
-
-        const auto& a = angle_data[i].y * (M_PI / 180.0);
-        const auto& d = dist_data[i].y;
+        double x = curve_dist.at(i).x;
+        double y = curve_dist.at(i).y;
+        double d = ::sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+    
+        min = d < min ? d : min;
+        max = d > max ? d : max;
         avg += (d - avg) / t++;
-        curve_dist.pushBack({ d * ::cos(a), d * ::sin(a) });
     }
 
     for (double a = 0.0; a <= (2*M_PI); a += .1)
@@ -147,6 +170,7 @@ void ToolboxRoundness::calculateRoundness()
         curve_min.pushBack({ min * ::cos(a), min * ::sin(a) });
         curve_max.pushBack({ max * ::cos(a), max * ::sin(a) });
         curve_avg.pushBack({ avg * ::cos(a), avg * ::sin(a) });
+        curve_lstsq.pushBack({r*::cos(a) + xc, r*::sin(a) + yc});
     }
 
     QColor color = Qt::transparent;
@@ -159,11 +183,9 @@ void ToolboxRoundness::calculateRoundness()
     ui->label_min->setText(QString::number(min));
     ui->label_max->setText(QString::number(max));
     ui->label_avg->setText(QString::number(avg));
+    ui->label_center->setText(QString::number(xc) + "," + QString::number(yc));
 
-    _plot_widget_B->addCurve("distance_polar", curve_dist, color);
-    _plot_widget_B->addCurve("min_polar", curve_min);
-    _plot_widget_B->addCurve("max_polar", curve_max);
-    _plot_widget_B->addCurve("average_polar", curve_avg);
+    _plot_widget_B->addCurve("Measured", curve_dist, color);
     _plot_widget_B->resetZoom();
 }
 
@@ -254,13 +276,71 @@ void ToolboxRoundness::formatToggle()
     }
 }
 
-std::tuple<double, double, double>
-ToolboxRoundness::leastSquaresCircleFit()
+void ToolboxRoundness::curvesToggled()
 {
+  if (_plot_widget_B)
+  {
+    if (ui->checkBox_MCC->isChecked())
+    {
+      _plot_widget_B->addCurve("MCC", curve_max);
+    } else {
+      _plot_widget_B->removeCurve("MCC");
+    }
 
-    Eigen::MatrixXf A = Eigen::MatrixXf::Random(5, 3);
-    Eigen::VectorXf b = Eigen::VectorXf::Random(5);
-    auto sol =  A.colPivHouseholderQr().solve(b);
+    if (ui->checkBox_MIC->isChecked())
+    {
+      _plot_widget_B->addCurve("MIC", curve_min);
+    } else {
+      _plot_widget_B->removeCurve("MIC");
+    }
 
-    return std::make_tuple(1, 2, 3);
+    if (ui->checkBox_mean->isChecked())
+    {
+      _plot_widget_B->addCurve("Mean", curve_avg);
+    } else {
+      _plot_widget_B->removeCurve("Mean");
+    }
+
+    if (ui->checkBox_lsc->isChecked())
+    {
+      _plot_widget_B->addCurve("LSC", curve_lstsq);
+    } else {
+      _plot_widget_B->removeCurve("LSC");
+    }
+
+    _plot_widget_B->resetZoom();
+  }
+}
+
+std::tuple<double, double, double>
+ToolboxRoundness::leastSquaresCircleFit(std::vector<std::tuple<double, double>> data)
+{
+   // https://eigen.tuxfamily.org/dox/group__LeastSquares.html
+   // https://lucidar.me/en/mathematics/least-squares-fitting-of-circle/
+
+    Eigen::MatrixXd A = Eigen::MatrixXd::Random(data.size(), 3);
+    Eigen::VectorXd b = Eigen::VectorXd::Random(data.size());
+
+    int row = 0;
+    for (const auto& d : data)
+    {
+      double x = std::get<0>(d);
+      double y = std::get<1>(d);
+
+      A(row, 0) = x;
+      A(row, 1) = y;
+      A(row, 2) = 1.0;
+      b(row) = x*x + y*y;
+      row++;
+    }
+
+    Eigen::Vector3d s = A.bdcSvd(Eigen::ComputeThinU | Eigen::ComputeThinV).solve(b);
+
+    double xc = s(0) / 2.0;
+    double yc = s(1) / 2.0;
+    double r = ::sqrt(4*s(2) + s(0)*s(0) + s(1)*s(1)) / 2.0;
+
+    // std::cout << xc << " " << yc << " " << r << "\n";
+
+    return std::make_tuple(xc, yc, r);
 }
