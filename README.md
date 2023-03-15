@@ -10,11 +10,11 @@ roundness, we mean in the
 The typical setup involves a high-precision way to spin the object
 being inspected (spindle). The data acquisition component is two
 pieces: a way to tell where on the object we are measuring (encoder)
-and a fix distance measurement device. The distance transducer is
-usually a capacitive sensor, but could be inductive, direct, or laser.
+and a fixed distance measurement device. The distance transducer is
+preferrably a capacitive sensor, but could be inductive, direct, or laser.
 
 Commercial products for doing very precise inspection are available,
-very expensive. This repository provides the hardware and software
+but are very expensive. This repository provides the hardware and software
 building blocks, along with some documentation so you can build your
 own setup. The license is open, so use what you want.
 
