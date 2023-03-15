@@ -200,6 +200,11 @@ void ToolboxRoundness::onClearCurves()
   ui->pushButtonCalculate->setEnabled(false);
 
   _curve_names.clear();
+
+  ui->label_min->setText(QString::number(0.0));
+  ui->label_max->setText(QString::number(0.0));
+  ui->label_avg->setText(QString::number(0.0));
+  ui->label_center->setText(QString::number(0.0) + "," + QString::number(0.0));
 }
 
 void ToolboxRoundness::onDragEnterEvent(QDragEnterEvent* event)
