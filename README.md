@@ -41,7 +41,9 @@ Wiring diagrams and part numbers.
 First, review the general [PlotJuggler tutorial](https://facontidavide.github.io/PlotJuggler/visualization_howto/index.html).
 
 In the test folder, there is a csv file with some sample "roundness"
-data. In PlotJuggler:
+data.
+
+In PlotJuggler:
 
 - Open the file by clicking the Data button at the top left.
 - In the popup, select "Use row number as X axis"
