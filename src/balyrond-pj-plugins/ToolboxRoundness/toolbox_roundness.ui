@@ -46,7 +46,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Drag and Drop a timeseries here (from the left panel):</string>
+        <string>Drag and Drop angle timeseries, then distance timeseries, here (from the left panel):</string>
        </property>
       </widget>
      </item>

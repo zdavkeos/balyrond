@@ -48,7 +48,7 @@ In PlotJuggler:
 - Open the file by clicking the Data button at the top left.
 - In the popup, select "Use row number as X axis"
 - Click "Ok"
-- Got to Tools -> Roundness Analysis
+- Go to Tools -> Roundness Analysis
 - Drag the `angle` and `distance` fields into the top plot viewer
 - Click "Calculate"
 

@@ -96,20 +96,23 @@ void ToolboxRoundness::calculateRoundness()
 {
     _plot_widget_B->removeAllCurves();
 
-    auto it = _plot_data->numeric.find("angle");
+    auto curve_iter = _plot_widget_A->curveList().begin();
+    auto& angle_name = (*curve_iter++).src_name;
+    auto it = _plot_data->numeric.find(angle_name);
     if (it == _plot_data->numeric.end())
     {
-        QMessageBox::warning(nullptr, tr("Didn't find 'angle'"),
+        QMessageBox::warning(nullptr, tr("Didn't find 'angle' timeseries"),
                              QString("Couldn't angle"),
                              QMessageBox::Ok);
         return;
     }
     PlotData& angle_data = it->second;
 
-    it = _plot_data->numeric.find("distance");
+    auto& dist_name = (*curve_iter).src_name;
+    it = _plot_data->numeric.find(dist_name);
     if (it == _plot_data->numeric.end())
     {
-        QMessageBox::warning(nullptr, tr("Didn't find 'distance'"),
+        QMessageBox::warning(nullptr, tr("Didn't find 'distance' timeseries"),
                              QString("Couldn't distance"),
                              QMessageBox::Ok);
         return;
@@ -205,6 +208,12 @@ void ToolboxRoundness::onClearCurves()
   ui->label_max->setText(QString::number(0.0));
   ui->label_avg->setText(QString::number(0.0));
   ui->label_center->setText(QString::number(0.0) + "," + QString::number(0.0));
+
+  ui->checkBox_MCC->setCheckState(Qt::Unchecked);
+  ui->checkBox_MIC->setCheckState(Qt::Unchecked);
+  ui->checkBox_mean->setCheckState(Qt::Unchecked);
+  ui->checkBox_lsc->setCheckState(Qt::Unchecked);
+  
 }
 
 void ToolboxRoundness::onDragEnterEvent(QDragEnterEvent* event)
