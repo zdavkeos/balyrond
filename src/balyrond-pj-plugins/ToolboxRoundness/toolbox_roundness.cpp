@@ -155,6 +155,7 @@ void ToolboxRoundness::calculateRoundness()
     // we can find the min and max circles
     double min = std::numeric_limits<double>::max();
     double max = std::numeric_limits<double>::min();
+    double dfts = std::numeric_limits<double>::min(); // Deviation From True Circle
     double avg = 0;
     size_t t = 1;
     for (size_t i = 0; i < curve_dist.size(); i++)
@@ -166,6 +167,11 @@ void ToolboxRoundness::calculateRoundness()
         min = d < min ? d : min;
         max = d > max ? d : max;
         avg += (d - avg) / t++;
+
+        if (::abs(d) > dfts)
+        {
+          dfts = ::abs(d);
+        }
     }
 
     for (double a = 0.0; a <= (2*M_PI); a += .1)
@@ -187,6 +193,7 @@ void ToolboxRoundness::calculateRoundness()
     ui->label_max->setText(QString::number(max));
     ui->label_avg->setText(QString::number(avg));
     ui->label_center->setText(QString::number(xc) + "," + QString::number(yc));
+    ui->label_dfts->setText(QString::number(dfts));
 
     _plot_widget_B->addCurve("Measured", curve_dist, color);
     _plot_widget_B->resetZoom();
@@ -208,6 +215,7 @@ void ToolboxRoundness::onClearCurves()
   ui->label_max->setText(QString::number(0.0));
   ui->label_avg->setText(QString::number(0.0));
   ui->label_center->setText(QString::number(0.0) + "," + QString::number(0.0));
+  ui->label_dfts->setText(QString::number(0.0));
 
   ui->checkBox_MCC->setCheckState(Qt::Unchecked);
   ui->checkBox_MIC->setCheckState(Qt::Unchecked);
