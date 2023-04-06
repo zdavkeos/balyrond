@@ -44,3 +44,6 @@ REM Windows installer
 REM rmdir /S /Q .\installer\io.plotjuggler.application\data
 REM xcopy .\install\bin\*.* .\installer\io.plotjuggler.application\data /Y /S /f /z
 REM C:\Qt\Tools\QtInstallerFramework\4.4\bin\binarycreator.exe --offline-only -c .\installer\config.xml -p .\installer .\PlotJugglerInstaller.exe
+
+PAUSE
+
