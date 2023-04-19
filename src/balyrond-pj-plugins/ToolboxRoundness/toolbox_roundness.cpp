@@ -162,16 +162,12 @@ void ToolboxRoundness::calculateRoundness()
     {
         double x = curve_dist.at(i).x;
         double y = curve_dist.at(i).y;
-        double d = ::sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc));
+        double d = ::sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc)) - r;
     
-        min = d < min ? d : min;
-        max = d > max ? d : max;
-        avg += (d - avg) / t++;
-
-        if (::abs(d) > dfts)
-        {
-          dfts = ::abs(d);
-        }
+        min = y < min ? y : min;
+        max = y > max ? y : max;
+        dfts = ::abs(d) > dfts ? ::abs(d) : dfts;
+        avg += (y - avg) / t++;
     }
 
     for (double a = 0.0; a <= (2*M_PI); a += .1)
