@@ -4,3 +4,6 @@
 [submodule "src/PlotJuggler"]
 	path = src/PlotJuggler
 	url = https://github.com/facontidavide/PlotJuggler
+[submodule "firmware/0_10v_rp2040/pico-sdk"]
+	path = firmware/0_10v_rp2040/pico-sdk
+	url = https://github.com/raspberrypi/pico-sdk.git
