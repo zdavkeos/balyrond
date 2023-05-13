@@ -1,3 +1,5 @@
+// Copyright 2023 Zach Davis
+// SPDX-License-Identifier: MIT
 
 #pragma once
 

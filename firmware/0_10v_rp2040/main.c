@@ -1,3 +1,7 @@
+// Copyright 2023 Zach Davis
+// SPDX-License-Identifier: MIT
+
+// Seed XAIO RP204 Firmware
 // Quad encoder and 0-10V analog input
 
 #include <stdio.h>

@@ -1,10 +1,13 @@
+// Copyright 2023 Zach Davis
+// SPDX-License-Identifier: MIT
 
 // Maximum Inscribed Circle (MIC) calculations
 // Ported from the Python prototype
 
 #include "mic.h"
 
-typedef std::tuple<double, double, double> Tri;
+typedef std::tuple<Pt, Pt, Pt> Tri;
+typedef std::tuple<Pt, double> Circ;
 
 // determinant of a 3x3 matrix
 double det(double a, double b, double c, double d, double e, double f, double g, double h, double i)
@@ -15,15 +18,15 @@ double det(double a, double b, double c, double d, double e, double f, double g,
 // Triangle to Circle
 // Using minor matrix determinants
 // https://web.archive.org/web/20161011113446/http://www.abecedarical.com/zenosamples/zs_circle3pts.html
-Tri
-tri_to_circ3(Pt& p1, Pt& p2, Pt& p3)
+Circ
+tri_to_circ3(Tri& t)
 {
-    double x1 = std::get<0>(p1);
-    double x2 = std::get<0>(p2);
-    double x3 = std::get<0>(p3);
-    double y1 = std::get<1>(p1);
-    double y2 = std::get<1>(p2);
-    double y3 = std::get<1>(p3);
+    double x1 = std::get<0>(std::get<0>(t));
+    double x2 = std::get<0>(std::get<1>(t));
+    double x3 = std::get<0>(std::get<2>(t));
+    double y1 = std::get<1>(std::get<0>(t));
+    double y2 = std::get<1>(std::get<1>(t));
+    double y3 = std::get<1>(std::get<2>(t));
 
     double m11 = det(x1, y1, 1, x2, y2, 1, x3, y3, 1);
     double m12 = det((x1*x1)+(y1*y1), y1, 1, (x2*x2)+(y2*y2), y2, 1, (x3*x3)+(y3*y3), y3, 1);
@@ -50,18 +53,18 @@ dist(Pt& p1, Pt& p2)
 
 // determine if a point is inside or on a circle
 bool
-in_circ(Pt& circ_center, double r, Pt& pt)
+in_circ(Circ& circ, Pt& pt)
 {
-    double d = dist(circ_center, pt);
-    return d < (r - .00001); // fudge due to numerical accuracy
+    double d = dist(std::get<0>(circ), pt);
+    return d < (std::get<1>(circ) - .00001); // fudge due to numerical accuracy
 }
 
 // determine if all points are outside or on a circle
 bool
-is_mic(Pt& circ_center, double r, std::vector<Pt&> pts)
+is_mic(Circ& circ, std::vector<Pt>& pts)
 {
     for (auto& pt : pts) {
-        if(in_circ(circ_center, r, pt)) {
+        if(in_circ(circ, pt)) {
             return false;
         }
     }
@@ -69,12 +72,23 @@ is_mic(Pt& circ_center, double r, std::vector<Pt&> pts)
 }
 
 // Pick the 3 control points based on largest radius
-decide_mic(pts):
-    b = -1
-    bs = None
-    for i in itertools.combinations(pts, 3):
+Tri
+decide_mic(Pt& p1, Pt& p2, Pt& p3, Pt& p4)
+{
+    double best_r = -1.0;
+
+    std::vector<Tri&> tris = {};
+    auto t = std::max_element(tris.begin(), tris.end(),
+        [&](const& t1, const& t2) {
+            if (!is_mic()
+
+        }
+    )
+    
+    for (int i = 0; i < itertools.combinations(pts, 3):
         x, y, r = tri_to_circ3(*i)
         if r > b and is_mic(x, y, r, pts):
             b = r
             bs = list(i)
     return bs
+}

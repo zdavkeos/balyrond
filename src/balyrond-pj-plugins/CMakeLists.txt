@@ -67,8 +67,6 @@ QT5_WRAP_UI ( BALYROND_UI_SRC  DataStreamBalyrond/datastream_balyrond_dialog.ui 
 #QT5_ADD_RESOURCES (RES_SRC  DataStreamBalyrond/icons.qrc )
 
 add_library(DataStreamBalyrond SHARED
-    DataStreamBalyrond/mic.h
-    DataStreamBalyrond/mic.cpp
     DataStreamBalyrond/datastream_balyrond.h
     DataStreamBalyrond/datastream_balyrond.cpp
     DataStreamBalyrond/datastream_balyrond_dialog.h
@@ -90,6 +88,10 @@ QT5_WRAP_UI ( BALYROND_UI_SRC  ToolboxRoundness/toolbox_roundness.ui  )
 #QT5_ADD_RESOURCES (RES_SRC  DataStreamBalyrond/icons.qrc )
     
 add_library(ToolboxRoundness SHARED
+        ToolboxRoundness/mic.h
+        ToolboxRoundness/mic.cpp
+        ToolboxRoundness/lscf.h
+        ToolboxRoundness/lscf.cpp
         ToolboxRoundness/toolbox_roundness.h
         ToolboxRoundness/toolbox_roundness.cpp
         ${BALYROND_UI_SRC}
