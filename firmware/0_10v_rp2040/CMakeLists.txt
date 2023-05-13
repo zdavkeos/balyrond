@@ -18,7 +18,7 @@ pico_enable_stdio_usb(0_10v_rp2040 1)
 pico_enable_stdio_uart(0_10v_rp2040 0)
 
 # Add pico_stdlib library which aggregates commonly used features
-target_link_libraries(0_10v_rp2040 PRIVATE pico_stdlib hardware_pio hardware_adc)
+target_link_libraries(0_10v_rp2040 PRIVATE pico_stdlib pico_time hardware_pio hardware_adc)
 
 # create map/bin/hex/uf2 file in addition to ELF.
 pico_add_extra_outputs(0_10v_rp2040)
