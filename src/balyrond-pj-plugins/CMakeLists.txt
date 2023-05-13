@@ -67,6 +67,8 @@ QT5_WRAP_UI ( BALYROND_UI_SRC  DataStreamBalyrond/datastream_balyrond_dialog.ui 
 #QT5_ADD_RESOURCES (RES_SRC  DataStreamBalyrond/icons.qrc )
 
 add_library(DataStreamBalyrond SHARED
+    DataStreamBalyrond/mic.h
+    DataStreamBalyrond/mic.cpp
     DataStreamBalyrond/datastream_balyrond.h
     DataStreamBalyrond/datastream_balyrond.cpp
     DataStreamBalyrond/datastream_balyrond_dialog.h
