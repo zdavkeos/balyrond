@@ -5,14 +5,14 @@
 
 #include <vector>
 
-typedef struct mic
+typedef struct
 {
     double center_x;
     double center_y;
     double radius;
+    double dfts; // Deviation from true circle
 } MIC;
 
 typedef std::tuple<double, double> Pt;
 
-MIC
-calculateMIC(std::vector<Pt>);
+void calculateMIC(std::vector<Pt>& pts, std::shared_ptr<MIC> out);

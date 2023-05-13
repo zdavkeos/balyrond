@@ -6,8 +6,8 @@
 
 #include <Eigen/Dense>
 
-std::tuple<double, double, double>
-leastSquaresCircleFit(std::vector<std::tuple<double, double>>& data)
+void
+leastSquaresCircleFit(std::vector<std::tuple<double, double>>& data, std::shared_ptr<LSCF> lscf)
 {
    // https://eigen.tuxfamily.org/dox/group__LeastSquares.html
    // https://lucidar.me/en/mathematics/least-squares-fitting-of-circle/
@@ -36,5 +36,8 @@ leastSquaresCircleFit(std::vector<std::tuple<double, double>>& data)
 
     // std::cout << xc << " " << yc << " " << r << "\n";
 
-    return std::make_tuple(xc, yc, r);
+    lscf->center_x = xc;
+    lscf->center_y = yc;
+    lscf->radius = r;
+    // TODO lscf->
 }

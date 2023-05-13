@@ -138,7 +138,7 @@ void ToolboxRoundness::calculateRoundness()
     curve_max.clear();
     curve_lstsq.clear();
 
-    std::vector<std::tuple<double, double>> asdf;
+    std::vector<std::tuple<double, double>> pts;
     for (size_t i = min_index; i <= max_index; i++)
     {
         const auto& a = angle_data[i].y * (M_PI / 180.0);
@@ -147,39 +147,25 @@ void ToolboxRoundness::calculateRoundness()
         double x = d * ::cos(a);
         double y = d * ::sin(a);
         curve_dist.pushBack({ x, y });
-        asdf.push_back({ x, y });
+        pts.push_back({ x, y });
     }
 
-    auto lsqf = ::leastSquaresCircleFit(asdf);
-    double xc = std::get<0>(lsqf);
-    double yc = std::get<1>(lsqf);
-    double r = std::get<2>(lsqf);
+    // Least Squares Circle
+    auto lscf = std::make_shared<LSCF>();
+    ::leastSquaresCircleFit(pts, lscf);
 
-    // now that we know the true center,
-    // we can find the min and max circles
-    double min = std::numeric_limits<double>::max();
-    double max = std::numeric_limits<double>::min();
-    double dfts = std::numeric_limits<double>::min(); // Deviation From True Circle
-    double avg = 0;
-    size_t t = 1;
-    for (size_t i = 0; i < curve_dist.size(); i++)
-    {
-        double x = curve_dist.at(i).x;
-        double y = curve_dist.at(i).y;
-        double d = ::sqrt((x-xc)*(x-xc) + (y-yc)*(y-yc)) - r;
-    
-        min = y < min ? y : min;
-        max = y > max ? y : max;
-        dfts = ::abs(d) > dfts ? ::abs(d) : dfts;
-        avg += (y - avg) / t++;
-    }
+    // Max Inscribed Circle
+    auto mic = std::make_shared<MIC>();
+    calculateMIC(pts, mic);
 
+    std::cout << "MIC: " << mic->center_x << " " << mic->center_y << " " << mic->radius << " " << mic->dfts << "\n";
+
+    // create the circles for plotting
     for (double a = 0.0; a <= (2*M_PI); a += .1)
     {
-        curve_min.pushBack({ min * ::cos(a), min * ::sin(a) });
-        curve_max.pushBack({ max * ::cos(a), max * ::sin(a) });
-        curve_avg.pushBack({ avg * ::cos(a), avg * ::sin(a) });
-        curve_lstsq.pushBack({r*::cos(a) + xc, r*::sin(a) + yc});
+        curve_min.pushBack({ mic->radius * ::cos(a) + mic->center_x, mic->radius * ::sin(a) + mic->center_y });
+        //curve_max.pushBack({ max * ::cos(a), max * ::sin(a) });
+        curve_lstsq.pushBack({ lscf->radius * ::cos(a) + lscf->center_x, lscf->radius * ::sin(a) + lscf->center_y});
     }
 
     QColor color = Qt::transparent;
@@ -189,11 +175,10 @@ void ToolboxRoundness::calculateRoundness()
         color = colorHint.value<QColor>();
     }
 
-    ui->label_min->setText(QString::number(min));
-    ui->label_max->setText(QString::number(max));
-    ui->label_avg->setText(QString::number(avg));
-    ui->label_center->setText(QString::number(xc) + "," + QString::number(yc));
-    ui->label_dfts->setText(QString::number(dfts));
+    //ui->label_min->setText(QString::number(mic->dfts));
+    //ui->label_max->setText(QString::number(max));
+    //ui->label_center->setText(QString::number(xc) + "," + QString::number(yc));
+    ui->label_dfts->setText(QString::number(mic->dfts));
 
     _plot_widget_B->addCurve("Measured", curve_dist, color);
     _plot_widget_B->resetZoom();
@@ -213,13 +198,11 @@ void ToolboxRoundness::onClearCurves()
 
   ui->label_min->setText(QString::number(0.0));
   ui->label_max->setText(QString::number(0.0));
-  ui->label_avg->setText(QString::number(0.0));
   ui->label_center->setText(QString::number(0.0) + "," + QString::number(0.0));
   ui->label_dfts->setText(QString::number(0.0));
 
   ui->checkBox_MCC->setCheckState(Qt::Unchecked);
   ui->checkBox_MIC->setCheckState(Qt::Unchecked);
-  ui->checkBox_mean->setCheckState(Qt::Unchecked);
   ui->checkBox_lsc->setCheckState(Qt::Unchecked);
   
 }
@@ -314,13 +297,6 @@ void ToolboxRoundness::curvesToggled()
       _plot_widget_B->addCurve("MIC", curve_min);
     } else {
       _plot_widget_B->removeCurve("MIC");
-    }
-
-    if (ui->checkBox_mean->isChecked())
-    {
-      _plot_widget_B->addCurve("Mean", curve_avg);
-    } else {
-      _plot_widget_B->removeCurve("Mean");
     }
 
     if (ui->checkBox_lsc->isChecked())

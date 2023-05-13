@@ -4,6 +4,14 @@
 #pragma once
 
 #include <tuple>
+#include <memory>
 
-std::tuple<double, double, double>
-leastSquaresCircleFit(std::vector<std::tuple<double, double>>& data);
+typedef struct
+{
+    double center_x;
+    double center_y;
+    double radius;
+    double dfts; // Deviation from true circle
+} LSCF;
+
+void leastSquaresCircleFit(std::vector<std::tuple<double, double>>& data, std::shared_ptr<LSCF> lscf);

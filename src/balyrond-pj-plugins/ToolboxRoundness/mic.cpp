@@ -6,6 +6,8 @@
 
 #include "mic.h"
 
+#include <array>
+
 typedef std::tuple<Pt, Pt, Pt> Tri;
 typedef std::tuple<Pt, double> Circ;
 
@@ -37,7 +39,7 @@ tri_to_circ3(Tri& t)
     double y = -.5 * (m13 / m11);
     double r = ::sqrt(::abs(x*x + y*y + (m14 / m11)));
 
-    return {x, y, r};
+    return {{x, y}, r};
 }
 
 // euclidian distance
@@ -61,6 +63,17 @@ in_circ(Circ& circ, Pt& pt)
 
 // determine if all points are outside or on a circle
 bool
+is_mic(Circ& circ, std::vector<Pt>&& pts)
+{
+    for (auto& pt : pts) {
+        if(in_circ(circ, pt)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool
 is_mic(Circ& circ, std::vector<Pt>& pts)
 {
     for (auto& pt : pts) {
@@ -73,22 +86,77 @@ is_mic(Circ& circ, std::vector<Pt>& pts)
 
 // Pick the 3 control points based on largest radius
 Tri
-decide_mic(Pt& p1, Pt& p2, Pt& p3, Pt& p4)
+decide_mic(std::array<Pt, 4> pts)
 {
+    Pt& p1 = pts[0];
+    Pt& p2 = pts[1]; 
+    Pt& p3 = pts[2];
+    Pt& p4 = pts[3];
+
     double best_r = -1.0;
+    Tri best_t;
 
-    std::vector<Tri&> tris = {};
-    auto t = std::max_element(tris.begin(), tris.end(),
-        [&](const& t1, const& t2) {
-            if (!is_mic()
-
-        }
-    )
+    // all 4 combinations
+    std::vector<Tri> tris = {{p1,p2,p4},
+                             {p1,p3,p4},
+                             {p2,p3,p4}};
     
-    for (int i = 0; i < itertools.combinations(pts, 3):
-        x, y, r = tri_to_circ3(*i)
-        if r > b and is_mic(x, y, r, pts):
-            b = r
-            bs = list(i)
-    return bs
+    for (auto& t : tris) {
+        auto circ = tri_to_circ3(t);
+        if (std::get<1>(circ) > best_r && is_mic(circ, {p1, p2, p3, p4})) {
+            best_r = std::get<1>(circ);
+            best_t = t;
+        }
+    }
+
+    return best_t;
+}
+
+void
+calculateMIC(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
+{
+    // initial points: Step 1
+    Pt maxx = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    Pt minx = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+    Pt maxy = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    Pt miny = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+
+    std::array<Pt, 4> mic = {maxx, minx, maxy, miny};
+    Circ circ;
+
+    while (true)
+    {
+        // Of the 4 points, determine the 3 control points. Step 2
+        auto t = decide_mic(mic);
+        circ = tri_to_circ3(t);
+
+        // Step 3
+        if (is_mic(circ, pts)) {
+            break;
+        }
+
+        // Pick point closest to center as next control point. Step 4
+        auto pn = std::min_element(pts.begin(), pts.end(),
+                                   [&](auto& p1, auto& p2){
+                                       return dist(p1, std::get<0>(circ)) < dist(p2, std::get<0>(circ));
+                                   }
+        );
+
+        mic[3] = *pn;
+    }
+
+    // Determine Roundness Error. Step 5.
+    double dfts = std::numeric_limits<double>::min();
+    auto mic_center = std::get<0>(circ);
+    for (auto& pt : pts) {
+        double d = dist(mic_center, pt) - std::get<1>(circ);
+        if (d > dfts) {
+            dfts = d;
+        }
+    }
+
+    out->center_x = std::get<0>(std::get<0>(circ));
+    out->center_y = std::get<1>(std::get<0>(circ));
+    out->radius = std::get<1>(circ);
+    out->dfts = dfts;
 }

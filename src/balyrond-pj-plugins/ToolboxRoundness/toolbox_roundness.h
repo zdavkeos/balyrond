@@ -61,9 +61,6 @@ private:
 
   void calculateRoundness();
 
-  std::tuple<double, double, double>
-  leastSquaresCircleFit(std::vector<std::tuple<double, double>> data);
-
 private slots:
 
   void onDragEnterEvent(QDragEnterEvent* event);
