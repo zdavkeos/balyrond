@@ -7,6 +7,7 @@
 #include "mic.h"
 
 #include <array>
+#include <algorithm>
 
 typedef std::tuple<Pt, Pt, Pt> Tri;
 typedef std::tuple<Pt, double> Circ;

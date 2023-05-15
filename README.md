@@ -69,17 +69,11 @@ In general, follow the prerequisites for PlotJuggler.
 
 1. Clone this repo: `git clone <repo-url> --recurse-submodules`
 2. Fix the path to vcpkg in `build-win32.bat`
-3. Run `build-win32.bat`
+3. Run `build-windows.bat`
 4. The `install/bin` folder is the standalone application folder
 
-### Instructions: Linux
+### Instructions: Linux and Mac
 
 1. Clone this repo: `git clone <repo-url> --recurse-submodules`
-3. Run `./build-linux.sh`
-4. The `install/bin` folder is the standalone application folder
-
-### Instructions: Mac
-
-1. Clone this repo: `git clone <repo-url> --recurse-submodules`
-3. Run `./build-mac.sh`
+3. Run `./build-nix.sh`
 4. The `install/bin` folder is the standalone application folder

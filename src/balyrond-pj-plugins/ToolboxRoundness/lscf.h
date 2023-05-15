@@ -4,6 +4,7 @@
 #pragma once
 
 #include <tuple>
+#include <vector>
 #include <memory>
 
 typedef struct
