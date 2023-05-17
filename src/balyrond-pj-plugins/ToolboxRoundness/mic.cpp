@@ -7,6 +7,8 @@
 #include "mic.h"
 
 #include <array>
+#include <cmath>
+#include <limits>
 #include <algorithm>
 
 typedef std::tuple<Pt, Pt, Pt> Tri;
@@ -117,10 +119,22 @@ void
 calculateMIC(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
 {
     // initial points: Step 1
-    Pt maxx = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
-    Pt minx = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
-    Pt maxy = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
-    Pt miny = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+    Pt maxx = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+    Pt minx = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+    Pt maxy = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min()};
+    Pt miny = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max()};
+
+    for (const auto& pt : pts)
+    {
+        if (std::get<0>(pt) > std::get<0>(maxx))
+            maxx = pt;
+        if (std::get<0>(pt) < std::get<0>(minx))
+            minx = pt;
+        if (std::get<1>(pt) > std::get<1>(maxy))
+            maxy = pt;
+        if (std::get<1>(pt) < std::get<1>(miny))
+            miny = pt;
+    }
 
     std::array<Pt, 4> mic = {maxx, minx, maxy, miny};
     Circ circ;
@@ -143,6 +157,9 @@ calculateMIC(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
                                    }
         );
 
+        mic[0] = std::get<0>(t);
+        mic[1] = std::get<1>(t);
+        mic[2] = std::get<2>(t);
         mic[3] = *pn;
     }
 
