@@ -38,7 +38,7 @@ bool DataStreamBalyrond::start(QStringList*)
 
     _port->setPortName(_params.port);
     _port->setBaudRate(115200); // irrelevant for usb_cdc, but why not
-    
+
     if (!_port->open(QIODevice::ReadOnly))
     {
         QMessageBox::warning(nullptr, tr("Could not open port"),
@@ -46,6 +46,8 @@ bool DataStreamBalyrond::start(QStringList*)
                              QMessageBox::Ok);
         return false;
     }
+
+    _port->setDataTerminalReady(true);
 
     _input_data.clear();
     

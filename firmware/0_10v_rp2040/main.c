@@ -5,6 +5,7 @@
 // Quad encoder and 0-10V analog input
 
 #include <stdio.h>
+#include <math.h>
 
 #include <pico/stdlib.h>
 #include <pico/time.h>
@@ -46,7 +47,7 @@ int main(void)
             int64_t diff = absolute_time_diff_us(last_time, time);
             last_time = time;
 
-            float angle = counts * deg_per_count;
+            float angle = fmod(counts * deg_per_count, 360.0);
             
             // compute velocity
             int delta = counts - last_count;
