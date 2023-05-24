@@ -22,19 +22,29 @@ The main components are:
 
 ### Two PlotJuggler Plugins
 
-[PlotJuggler](https://plotjuggler.io/) is an open source realtime
-plotting program. Included in this repo are two plugins:
+[PlotJuggler](https://plotjuggler.io/) is an open-source realtime data
+capture and plotting program that is easy to extend. Included in this
+repo are two plugins:
 
 - Data Streaming of roundness data from a serial port
 - Roundness analysis toolbox for analyzing the data
 
 ### Firmware examples
 
-The current target platform is a Seeeduino XIAO running micropython.
+The current target platform is a Seeeduino XIAO RP2040.
 
 ### Hardware schematics
 
 Wiring diagrams and part numbers.
+
+## Features
+
+- Live plotting of data
+- Save captured data to CSV
+- Loading of data from CSV
+- Polar plots
+- Least Squares Circle Fit
+- MIC, MCC and MCZ (in process)
 
 ## Brief Tutorial: Looking at data
 
@@ -53,6 +63,26 @@ In PlotJuggler:
 - Click "Calculate"
 
 ![Sample Data](img/balyrond_sample.png)
+
+## Design
+
+This project wasn't so much 'designed' as it was assembled from things
+on hand and software I was familiar with.
+
+The hardware (microcontroller and endcoders) were things I already
+had. The choice of microcontroller (XAIO RP2040) turned out to be
+especially convenient: the PIO handles the encoder counts and the USB
+interface provides all the power plus the virtual serial port. Data
+transfers at a reasonable rate. The ability to prototype using python
+and then switch to C for the final product was great.
+
+The decision to base the desktop software on PlotJuggler was a selfish
+one - it was a platform that I was familiar with. It is powerful is
+easy to hack on and extend. The fact that it already supports loading
+CSV files made testing easy. It works on Windows, Linux and MacOS
+which is a bonus. Having Qt and qwt available plus access to several
+powerful OSS C++ libraries (Eigen, jc_voronoi, etc.) made for quick
+development.
 
 ## Building the Plugins
 
