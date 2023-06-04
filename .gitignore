@@ -37,3 +37,6 @@ install/
 
 # Mac bs
 .Ds_Store
+
+# vscode
+.vscode

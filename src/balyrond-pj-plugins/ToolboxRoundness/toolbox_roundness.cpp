@@ -5,7 +5,7 @@
 #include "ui_toolbox_roundness.h"
 
 #include "lscf.h"
-#include "mic.h"
+#include "mic2.h"
 
 #include <QDialogButtonBox>
 #include <QEvent>
@@ -156,7 +156,7 @@ void ToolboxRoundness::calculateRoundness()
 
     // Max Inscribed Circle
     auto mic = std::make_shared<MIC>();
-    calculateMIC(pts, mic);
+    calculateMIC2(pts, mic);
 
     std::cout << "MIC: " << mic->center_x << " " << mic->center_y << " " << mic->radius << " " << mic->dfts << "\n";
 

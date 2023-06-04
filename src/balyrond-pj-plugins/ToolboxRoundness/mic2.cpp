@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: MIT
 
 // Maximum Inscribed Circle (MIC) calculations
-// using delauney triangulation
+// using delauney triangulation,
+// voronoi diagram and convex hull
+// 
 
 #include "mic2.h"
 
@@ -19,52 +21,36 @@
 #define JCV_PI 3.141592653589793115997963468544185161590576171875
 #include "jc_voronoi.h"
 
-struct Edge
+Tri
+threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
 {
-    double a;
-    double b;
+    Pt tp1, tp2, tp3;
 
-    bool operator==(const Edge& other) {
-        return (jcv_real_eq(a, other.a) && jcv_real_eq(b, other.b)) ||
-               (jcv_real_eq(b, other.a) && jcv_real_eq(a, other.b));
+    auto distCmp = [=](const Pt& p1, const Pt& p2) {
+                        if (len(p, p1) < len(p, p2)) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    };
+
+    // erase p
+    for (auto it = pts.begin(); it != pts.end(); it++) {
+        if (*it == p)
+            pts.erase(it);
     }
 
-    bool conjoins(const Edge& other) {
-        return jcv_real_eq(a, other.a) ||
-            jvc_real_eq(a, other.b) ||
-            jvc_real_eq(b, other.a) ||
-            jvc_real_eq(b, other.b);
-    }
-};
+    std::make_heap(pts.begin(), pts.end(), distCmp);
+                    
+    tp1 = pts[0];
+    std::pop_heap(pts.begin(), pts.end(), distCmp);
+    
+    tp2 = pts[0];
+    std::pop_heap(pts.begin(), pts.end(), distCmp);
 
-typedef std::tuple<Pt, Pt, Pt> Tri;
-typedef std::tuple<Pt, double> Circ;
+    tp3 = pts[0];
 
-double
-triArea(Tri& t)
-{
-    double x1 = std::get<0>(std::get<0>(t));
-    double x2 = std::get<0>(std::get<1>(t));
-    double x3 = std::get<0>(std::get<2>(t));
-    double y1 = std::get<1>(std::get<0>(t));
-    double y2 = std::get<1>(std::get<1>(t));
-    double y3 = std::get<1>(std::get<2>(t));
-
-    // return ::abs((x1*y2+x2*y3+x3*y1-y1*x2-y2*x3-y3*x1) / 2.0));
-    // https://cp-algorithms.com/geometry/oriented-triangle-area.html
-    return ::abs((x2-x1)*(y3-y2) - (x3-x2)*(y2-y1));
-}
-
-void
-findTriangles(std::set<Edge>& edges, std::vector<Tri>& tris)
-{
-    for (auto& edge : edges) {
-        for (auto& e : edges) {
-            if (edge == e)
-                continue;
-            if (
-        }
-    }
+    return Tri(tp1, tp2, tp3);
 }
 
 void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
@@ -72,23 +58,60 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     jcv_point* points = 0;
     jcv_diagram diagram;
 
-    points = (jcv_point*)malloc(sizeof(jcv_point) * (size_t)pts.count());
-    for (int i = 0; i < pts.count(); i++) {
-        points[i].x = std::get<0>(pts[i]);
-        points[i].y = std::get<1>(pts[i]);
+    points = (jcv_point*)malloc(sizeof(jcv_point) * (size_t)pts.size());
+    for (int i = 0; i < pts.size(); i++) {
+        points[i].x = pts[i].x;
+        points[i].y = pts[i].y;
     }
 
     memset(&diagram, 0, sizeof(jcv_diagram));
-    jcv_diagram_generate(pts.count(), (const jcv_point*)points, NULL, NULL, &diagram);
 
-    std::set<Edge> edges;
-    jcv_delauney_iter delauney;
-    jcv_delauney_begin( &diagram, &delauney );
-    jcv_delauney_edge delauney_edge;
-    while (jcv_delauney_next( &delauney, &delauney_edge ))
+    // generate the Delauney and Voronoi diagrams
+    jcv_diagram_generate(pts.size(), (const jcv_point*)points, NULL, NULL, &diagram);
+
+    // Compute the convex hull
+    std::vector<Pt> hull;
+    quickHull(pts, hull);
+
+    // Find all the voronoi sites inside the hull
+    std::vector<Pt> candidate_centers;
+    const jcv_site* sites = jcv_diagram_get_sites(&diagram);
+    for (int i = 0; i < diagram.numsites; i++)
     {
-        edges.emplace(delauney_edge.pos[0], delauney_edge.pos[1]);
+        const jcv_site* site = &sites[i];
+        Pt p(site->p.x, site->p.y);
+        if (inPolygon(hull, p)) {
+            candidate_centers.push_back(p);
+        }
+    }
+
+    // Where voronoi edges cross the hull are also potential MICs
+    // TODO: for(...)
+
+    // Go through all the candidate centers and find the
+    // one that forms the biggest circle with the closest 3 points
+    Circ biggest(Pt(), std::numeric_limits<double>::min());
+    for (auto& p : candidate_centers) {
+        Pt tp1, tp2, tp3;
+        std::vector<std::reference_wrapper<Pt>> plist(pts.begin(), pts.end());
+
+        Tri t = threeClosestPoints(plist, p);
+        Circ c = t.toCircle();
+
+        if (c.r > biggest.r) {
+            biggest = c;
+        }
     }
 
     jcv_diagram_free( &diagram );
+}
+
+void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out)
+{
+    std::vector<Pt> vp;
+
+    for (auto& p : pts) {
+        vp.emplace_back(p);
+    }
+    calculateMIC2(vp, out);
 }

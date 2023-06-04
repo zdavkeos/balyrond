@@ -15,7 +15,7 @@ typedef std::tuple<Pt, Pt, Pt> Tri;
 typedef std::tuple<Pt, double> Circ;
 
 // determinant of a 3x3 matrix
-double det(double a, double b, double c, double d, double e, double f, double g, double h, double i)
+double determ(double a, double b, double c, double d, double e, double f, double g, double h, double i)
 {
     return a*e*i + b*f*g +c*d*h - c*e*g - b*d*i - a*f*h;
 }
@@ -33,10 +33,10 @@ tri_to_circ3(Tri& t)
     double y2 = std::get<1>(std::get<1>(t));
     double y3 = std::get<1>(std::get<2>(t));
 
-    double m11 = det(x1, y1, 1, x2, y2, 1, x3, y3, 1);
-    double m12 = det((x1*x1)+(y1*y1), y1, 1, (x2*x2)+(y2*y2), y2, 1, (x3*x3)+(y3*y3), y3, 1);
-    double m13 = det(x1*x1+y1*y1, x1, 1, x2*x2+y2*y2, x2, 1, x3*x3+y3*y3, x3, 1);
-    double m14 = det(x1*x1+y1*y1, x1, y1, x2*x2+y2*y2, x2, y2, x3*x3+y3*y3, x3, y3);
+    double m11 = determ(x1, y1, 1, x2, y2, 1, x3, y3, 1);
+    double m12 = determ((x1*x1)+(y1*y1), y1, 1, (x2*x2)+(y2*y2), y2, 1, (x3*x3)+(y3*y3), y3, 1);
+    double m13 = determ(x1*x1+y1*y1, x1, 1, x2*x2+y2*y2, x2, 1, x3*x3+y3*y3, x3, 1);
+    double m14 = determ(x1*x1+y1*y1, x1, y1, x2*x2+y2*y2, x2, y2, x3*x3+y3*y3, x3, y3);
     
     double x = .5 * (m12 / m11);
     double y = -.5 * (m13 / m11);

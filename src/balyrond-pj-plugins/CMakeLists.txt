@@ -90,6 +90,10 @@ QT5_WRAP_UI ( BALYROND_UI_SRC  ToolboxRoundness/toolbox_roundness.ui  )
 add_library(ToolboxRoundness SHARED
         ToolboxRoundness/mic.h
         ToolboxRoundness/mic.cpp
+        ToolboxRoundness/mic2.h
+        ToolboxRoundness/mic2.cpp
+        ToolboxRoundness/geom.h
+        ToolboxRoundness/geom.cpp
         ToolboxRoundness/lscf.h
         ToolboxRoundness/lscf.cpp
         ToolboxRoundness/toolbox_roundness.h

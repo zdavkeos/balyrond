@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "geom.h"
+
 #include <vector>
 #include <memory>
 
@@ -14,6 +16,6 @@ typedef struct
     double dfts; // Deviation from true circle
 } MIC;
 
-typedef std::tuple<double, double> Pt;
-
 void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out);
+
+void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out);
