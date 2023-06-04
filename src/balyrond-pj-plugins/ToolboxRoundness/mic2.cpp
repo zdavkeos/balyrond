@@ -12,6 +12,7 @@
 #include <cmath>
 #include <limits>
 #include <algorithm>
+#include <iostream>
 
 #define JC_VORONOI_IMPLEMENTATION
 #define JCV_REAL_TYPE double
@@ -80,6 +81,7 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     {
         const jcv_site* site = &sites[i];
         Pt p(site->p.x, site->p.y);
+        std::cout << "Vor site: " << p << "\n";
         if (inPolygon(hull, p)) {
             candidate_centers.push_back(p);
         }

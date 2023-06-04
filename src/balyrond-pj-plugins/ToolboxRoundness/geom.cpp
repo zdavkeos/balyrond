@@ -44,6 +44,11 @@ std::ostream& operator<<(std::ostream& os, Pt& p) {
     return os << "(" << p.x << "," << p.y << ")";
 }
 
+// The length of segment (a, b).
+float len(const Pt& a, const Pt& b) {
+	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+}
+
 double cross(Pt v, Pt w) {
     return v.x*w.y - v.y*w.x;
 }
@@ -83,28 +88,6 @@ bool inPolygon(std::vector<Pt>& poly, Pt& a, bool strict)
     }
 
     return numCrossings & 1; // inside if odd number of crossings
-}
-
-// The z-value of the cross product of segments 
-// (a, b) and (a, c). Positive means c is ccw
-// from (a, b), negative cw. Zero means its collinear.
-float ccw(const Pt& a, const Pt& b, const Pt& c) {
-	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-}
-
-// Returns true if a is lexicographically before b.
-bool isLeftOf(const Pt& a, const Pt& b) {
-	return (a.x < b.x || (a.x == b.x && a.y < b.y));
-}
-
-// The length of segment (a, b).
-float len(const Pt& a, const Pt& b) {
-	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
-}
-
-// The unsigned distance of p from segment (a, b).
-float dist(const Pt& a, const Pt& b, const Pt& p) {
-	return fabs((b.x - a.x) * (a.y - p.y) - (b.y - a.y) * (a.x - p.x)) / len(a, b);
 }
 
 // Circles
@@ -162,6 +145,23 @@ Tri::toCircle()
 // Convex Hull (and stuff)
 // Adapted from:
 // https://github.com/MiguelVieira/ConvexHull2D
+
+// The z-value of the cross product of segments 
+// (a, b) and (a, c). Positive means c is ccw
+// from (a, b), negative cw. Zero means its collinear.
+float ccw(const Pt& a, const Pt& b, const Pt& c) {
+	return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
+}
+
+// Returns true if a is lexicographically before b.
+bool isLeftOf(const Pt& a, const Pt& b) {
+	return (a.x < b.x || (a.x == b.x && a.y < b.y));
+}
+
+// The unsigned distance of p from segment (a, b).
+float dist(const Pt& a, const Pt& b, const Pt& p) {
+	return fabs((b.x - a.x) * (a.y - p.y) - (b.y - a.y) * (a.x - p.x)) / len(a, b);
+}
 
 // Returns the index of the farthest Pt from segment (a, b).
 size_t getFarthest(const Pt& a, const Pt& b, const std::vector<Pt>& v) {

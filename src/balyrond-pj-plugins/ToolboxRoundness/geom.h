@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <tuple>
 #include <vector>
 #include <cmath>
 #include <ostream>
@@ -44,6 +45,9 @@ bool operator==(Pt& pt1, Pt& pt2);
 
 std::ostream& operator<<(std::ostream& os, Pt& p);
 
+// The length of segment (a, b).
+float len(const Pt& a, const Pt& b);
+
 double cross(Pt v, Pt w);
 
 double orient(Pt a, Pt b, Pt c);
@@ -61,20 +65,6 @@ bool inDisk(Pt a, Pt b, Pt p);
 bool onSegment(Pt a, Pt b, Pt p);
 
 bool inPolygon(std::vector<Pt>& poly, Pt& a, bool strict = true);
-
-// The z-value of the cross product of segments 
-// (a, b) and (a, c). Positive means c is ccw
-// from (a, b), negative cw. Zero means its collinear.
-float ccw(const Pt& a, const Pt& b, const Pt& c);
-
-// Returns true if a is lexicographically before b.
-bool isLeftOf(const Pt& a, const Pt& b);
-
-// The length of segment (a, b).
-float len(const Pt& a, const Pt& b);
-
-// The unsigned distance of p from segment (a, b).
-float dist(const Pt& a, const Pt& b, const Pt& p);
 
 // Circles
 
