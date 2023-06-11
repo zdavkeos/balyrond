@@ -179,11 +179,23 @@ size_t getFarthest(const Pt& a, const Pt& b, const std::vector<Pt>& v) {
 	return idxMax;
 }
 
+#include "matplotlibcpp.h"
+namespace plt = matplotlibcpp;
+
 // Recursive call of the quickhull algorithm.
 void quickHull(const std::vector<Pt>& v, const Pt& a, const Pt& b, std::vector<Pt>& hull) {
 	if (v.empty()) {
 		return;
 	}
+
+	std::vector<double> xs;
+	std::vector<double> ys;
+	for (auto p : v) {
+		xs.push_back(p.x);
+		ys.push_back(p.y);
+	}
+	plt::plot(xs, ys);
+	plt::show();
 
 	Pt f = v[getFarthest(a, b, v)];
 

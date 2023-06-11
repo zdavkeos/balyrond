@@ -190,7 +190,7 @@ test_set_3 = [
     Pt(-34.026, 82.145), Pt(-26.336, 86.817), Pt(-18.208, 91.540), Pt(-9.460, 96.052)]
 
 if __name__ == "__main__":
-    mic = find_mic(test_set_3)
+    mic = find_mic(test_set_1)
 
     print("MIC Control Points:")
     for m in mic:
@@ -199,4 +199,4 @@ if __name__ == "__main__":
     print("MIC Center and Radius:")
     print(tri_to_circ3(*mic))
 
-    plot(test_set_3, mic)
+    plot(test_set_1, mic)
