@@ -8,6 +8,7 @@
 
 #include "mic2.h"
 
+#include <set>
 #include <array>
 #include <cmath>
 #include <limits>
@@ -54,6 +55,14 @@ threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
     return Tri(tp1, tp2, tp3);
 }
 
+// for sorting Pt's
+struct PtCmp {
+    bool operator()(const Pt& lhs, const Pt& rhs) const
+    {
+        return isLeftOf(lhs, rhs);
+    }
+};
+
 void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
 {
     jcv_point* points = 0;
@@ -74,17 +83,37 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     std::vector<Pt> hull;
     quickHull(pts, hull);
 
-    // Find all the voronoi sites inside the hull
+    // Find all the voronoi vertices inside the hull
+    std::set<Pt, PtCmp> seen_points;
     std::vector<Pt> candidate_centers;
-    const jcv_site* sites = jcv_diagram_get_sites(&diagram);
-    for (int i = 0; i < diagram.numsites; i++)
+    const jcv_edge* edges = jcv_diagram_get_edges(&diagram);
+    while (edges)
     {
-        const jcv_site* site = &sites[i];
-        Pt p(site->p.x, site->p.y);
-        std::cout << "Vor site: " << p << "\n";
-        if (inPolygon(hull, p)) {
-            candidate_centers.push_back(p);
+        Pt p1(edges->pos[0].x, edges->pos[0].y);
+        Pt p2(edges->pos[1].x, edges->pos[1].y);
+        std::cout << "Vor vertex: " << p1 << "\n";
+        std::cout << "Vor vertex: " << p2 << "\n";
+        
+        if (seen_points.find(p1) == seen_points.end()) {
+            seen_points.insert(p1);
+            if (inPolygon(hull, p1)) {
+                candidate_centers.push_back(p1);
+            }
         }
+
+        if (seen_points.find(p2) == seen_points.end()) {
+            seen_points.insert(p2);
+            if (inPolygon(hull, p2)) {
+                candidate_centers.push_back(p2);
+            }
+        }
+
+        edges = jcv_diagram_get_next_edge(edges);
+    }
+
+    std::cout << "Candidate centers:\n";
+    for (auto p : candidate_centers) {
+        std::cout << p << "\n";
     }
 
     // Where voronoi edges cross the hull are also potential MICs
@@ -94,7 +123,6 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     // one that forms the biggest circle with the closest 3 points
     Circ biggest(Pt(), std::numeric_limits<double>::min());
     for (auto& p : candidate_centers) {
-        Pt tp1, tp2, tp3;
         std::vector<std::reference_wrapper<Pt>> plist(pts.begin(), pts.end());
 
         Tri t = threeClosestPoints(plist, p);
@@ -104,6 +132,10 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
             biggest = c;
         }
     }
+
+    out->center_x = biggest.c.x;
+    out->center_y = biggest.c.y;
+    out->radius = biggest.r;
 
     jcv_diagram_free( &diagram );
 }

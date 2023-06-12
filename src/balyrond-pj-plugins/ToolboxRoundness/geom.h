@@ -43,7 +43,11 @@ double abs(Pt& p);
 
 bool operator==(Pt& pt1, Pt& pt2);
 
+bool operator==(const Pt& pt1, const Pt& pt2);
+
 std::ostream& operator<<(std::ostream& os, Pt& p);
+
+std::ostream& operator<<(std::ostream& os, const Pt& p);
 
 // The length of segment (a, b).
 float len(const Pt& a, const Pt& b);
@@ -65,6 +69,8 @@ bool inDisk(Pt a, Pt b, Pt p);
 bool onSegment(Pt a, Pt b, Pt p);
 
 bool inPolygon(std::vector<Pt>& poly, Pt& a, bool strict = true);
+
+bool isLeftOf(const Pt& a, const Pt& b);
 
 // Circles
 

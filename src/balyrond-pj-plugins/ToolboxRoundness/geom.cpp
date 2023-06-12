@@ -33,10 +33,14 @@ double sqr(Pt& p) {
 }
 
 double abs(Pt& p) {
-    return ::sqrt(sqr(p));
+    return std::sqrt(sqr(p));
 }
 
 bool operator==(Pt& p1, Pt& p2) {
+    return p1.x == p2.x && p1.y == p2.y;
+}
+
+bool operator==(const Pt& p1, const Pt& p2) {
     return p1.x == p2.x && p1.y == p2.y;
 }
 
@@ -44,9 +48,13 @@ std::ostream& operator<<(std::ostream& os, Pt& p) {
     return os << "(" << p.x << "," << p.y << ")";
 }
 
+std::ostream& operator<<(std::ostream& os, const Pt& p) {
+    return os << "(" << p.x << "," << p.y << ")";
+}
+
 // The length of segment (a, b).
 float len(const Pt& a, const Pt& b) {
-	return sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
+	return std::sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y));
 }
 
 double cross(Pt v, Pt w) {
@@ -110,7 +118,7 @@ Tri::area()
     double y3 = p3.y;
 
     // https://cp-algorithms.com/geometry/oriented-triangle-area.html
-    return ::abs((x2-x1)*(y3-y2) - (x3-x2)*(y2-y1));
+    return std::abs((x2-x1)*(y3-y2) - (x3-x2)*(y2-y1));
 }
 
 // determinant of a 3x3 matrix
@@ -137,7 +145,7 @@ Tri::toCircle()
     
     double x = .5 * (m12 / m11);
     double y = -.5 * (m13 / m11);
-    double r = ::sqrt(::abs(x*x + y*y + (m14 / m11)));
+    double r = std::sqrt(std::abs(x*x + y*y + (m14 / m11)));
 
     return {{x, y}, r};
 }
@@ -160,7 +168,7 @@ bool isLeftOf(const Pt& a, const Pt& b) {
 
 // The unsigned distance of p from segment (a, b).
 float dist(const Pt& a, const Pt& b, const Pt& p) {
-	return fabs((b.x - a.x) * (a.y - p.y) - (b.y - a.y) * (a.x - p.x)) / len(a, b);
+	return std::abs((b.x - a.x) * (a.y - p.y) - (b.y - a.y) * (a.x - p.x)) / len(a, b);
 }
 
 // Returns the index of the farthest Pt from segment (a, b).
@@ -179,30 +187,18 @@ size_t getFarthest(const Pt& a, const Pt& b, const std::vector<Pt>& v) {
 	return idxMax;
 }
 
-#include "matplotlibcpp.h"
-namespace plt = matplotlibcpp;
-
 // Recursive call of the quickhull algorithm.
 void quickHull(const std::vector<Pt>& v, const Pt& a, const Pt& b, std::vector<Pt>& hull) {
 	if (v.empty()) {
 		return;
 	}
 
-	std::vector<double> xs;
-	std::vector<double> ys;
-	for (auto p : v) {
-		xs.push_back(p.x);
-		ys.push_back(p.y);
-	}
-	plt::plot(xs, ys);
-	plt::show();
-
 	Pt f = v[getFarthest(a, b, v)];
 
 	// Collect Pts to the left of segment (a, f)
 	std::vector<Pt> left;
 	for (auto p : v) {
-		if (ccw(a, f, p) > 0) {
+		if (ccw(a, f, p) > 0 && !(p == a) && !(p == b)) {
 			left.push_back(p);
 		}
 	}
@@ -214,7 +210,7 @@ void quickHull(const std::vector<Pt>& v, const Pt& a, const Pt& b, std::vector<P
 	// Collect Pts to the left of segment (f, b)
 	std::vector<Pt> right;
 	for (auto p : v) {
-		if (ccw(f, b, p) > 0) {
+		if (ccw(f, b, p) > 0 && !(p == a) && !(p == b)) {
 			right.push_back(p);
 		}
 	}
