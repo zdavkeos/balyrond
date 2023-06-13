@@ -8,12 +8,12 @@
 
 #include "mic2.h"
 
-#include <set>
 #include <array>
 #include <cmath>
 #include <limits>
 #include <algorithm>
 #include <iostream>
+#include <unordered_set>
 
 #define JC_VORONOI_IMPLEMENTATION
 #define JCV_REAL_TYPE double
@@ -29,12 +29,8 @@ threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
     Pt tp1, tp2, tp3;
 
     auto distCmp = [=](const Pt& p1, const Pt& p2) {
-                        if (len(p, p1) < len(p, p2)) {
-                            return true;
-                        } else {
-                            return false;
-                        }
-                    };
+        return len(p, p1) < len(p, p2);
+    };
 
     // erase p
     for (auto it = pts.begin(); it != pts.end(); it++) {
@@ -48,7 +44,7 @@ threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
     std::pop_heap(pts.begin(), pts.end(), distCmp);
     
     tp2 = pts[0];
-    std::pop_heap(pts.begin(), pts.end(), distCmp);
+    std::pop_heap(pts.begin(), pts.end() - 1, distCmp); // pop_heap is weird
 
     tp3 = pts[0];
 
@@ -56,10 +52,12 @@ threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
 }
 
 // for sorting Pt's
-struct PtCmp {
-    bool operator()(const Pt& lhs, const Pt& rhs) const
+template<>
+struct std::hash<Pt>
+{
+    std::size_t operator()(Pt const& p) const noexcept
     {
-        return isLeftOf(lhs, rhs);
+        return std::hash<double>{}(p.x) ^ std::hash<double>{}(p.y);
     }
 };
 
@@ -84,7 +82,7 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     quickHull(pts, hull);
 
     // Find all the voronoi vertices inside the hull
-    std::set<Pt, PtCmp> seen_points;
+    std::unordered_set<Pt> seen_points;
     std::vector<Pt> candidate_centers;
     const jcv_edge* edges = jcv_diagram_get_edges(&diagram);
     while (edges)
@@ -127,6 +125,9 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
 
         Tri t = threeClosestPoints(plist, p);
         Circ c = t.toCircle();
+
+        std::cout << "centers match? " << p << " >< " << c.c << "\n";
+        std::cout << "Tri: " << t.p1 << " " << t.p2 << " " << t.p3 << "\n";
 
         if (c.r > biggest.r) {
             biggest = c;
