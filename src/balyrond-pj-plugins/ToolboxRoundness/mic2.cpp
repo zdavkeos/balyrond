@@ -29,7 +29,7 @@ threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
     Pt tp1, tp2, tp3;
 
     auto distCmp = [=](const Pt& p1, const Pt& p2) {
-        return len(p, p1) < len(p, p2);
+        return len(p, p1) > len(p, p2);
     };
 
     // erase p
@@ -109,10 +109,10 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
         edges = jcv_diagram_get_next_edge(edges);
     }
 
-    std::cout << "Candidate centers:\n";
-    for (auto p : candidate_centers) {
-        std::cout << p << "\n";
-    }
+    // std::cout << "Candidate centers:\n";
+    // for (auto p : candidate_centers) {
+    //     std::cout << p << "\n";
+    // }
 
     // Where voronoi edges cross the hull are also potential MICs
     // TODO: for(...)
@@ -126,8 +126,8 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
         Tri t = threeClosestPoints(plist, p);
         Circ c = t.toCircle();
 
-        std::cout << "centers match? " << p << " >< " << c.c << "\n";
-        std::cout << "Tri: " << t.p1 << " " << t.p2 << " " << t.p3 << "\n";
+        // std::cout << "centers match? " << p << " >< " << c.c << "\n";
+        // std::cout << "Tri: " << t.p1 << " " << t.p2 << " " << t.p3 << "\n";
 
         if (c.r > biggest.r) {
             biggest = c;

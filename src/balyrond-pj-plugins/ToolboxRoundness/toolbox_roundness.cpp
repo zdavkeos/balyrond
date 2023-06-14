@@ -163,8 +163,8 @@ void ToolboxRoundness::calculateRoundness()
     // create the circles for plotting
     for (double a = 0.0; a <= (2*M_PI); a += .1)
     {
-        curve_min.pushBack({ mic->radius * ::cos(a) + mic->center_x, mic->radius * ::sin(a) + mic->center_y });
-        //curve_max.pushBack({ max * ::cos(a), max * ::sin(a) });
+        curve_max.pushBack({ mic->radius * ::cos(a) + mic->center_x, mic->radius * ::sin(a) + mic->center_y });
+        //curve_min.pushBack({ max * ::cos(a), max * ::sin(a) });
         curve_lstsq.pushBack({ lscf->radius * ::cos(a) + lscf->center_x, lscf->radius * ::sin(a) + lscf->center_y});
     }
 
@@ -287,14 +287,14 @@ void ToolboxRoundness::curvesToggled()
   {
     if (ui->checkBox_MCC->isChecked())
     {
-      _plot_widget_B->addCurve("MCC", curve_max);
+      _plot_widget_B->addCurve("MCC", curve_min);
     } else {
       _plot_widget_B->removeCurve("MCC");
     }
 
     if (ui->checkBox_MIC->isChecked())
     {
-      _plot_widget_B->addCurve("MIC", curve_min);
+      _plot_widget_B->addCurve("MIC", curve_max);
     } else {
       _plot_widget_B->removeCurve("MIC");
     }

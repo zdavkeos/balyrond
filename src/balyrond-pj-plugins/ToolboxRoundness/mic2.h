@@ -16,6 +16,10 @@ typedef struct
     double dfts; // Deviation from true circle
 } MIC;
 
+// for testing
+Tri
+threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p);
+
 void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out);
 
 void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out);
