@@ -51,18 +51,37 @@ threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p)
     return Tri(tp1, tp2, tp3);
 }
 
-// for sorting Pt's
-template<>
-struct std::hash<Pt>
+void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_ptr<Circ> boundingCircle)
 {
-    std::size_t operator()(Pt const& p) const noexcept
-    {
-        return std::hash<double>{}(p.x) ^ std::hash<double>{}(p.y);
-    }
-};
+    // Cover the special cases first
+    if (pts.size() < 2) {
+        std::cout << "Too few points to calculate MIC!\n";
 
-void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
-{
+        out->center_x = 0.0;
+        out->center_y = 0.0;
+        out->radius = 0.0;
+
+        return;
+    }
+
+    if (pts.size() == 2) {
+        out->center_x = pts[1].x - pts[0].x;
+        out->center_y = pts[1].y - pts[0].y;
+        out->radius = len(pts[0], pts[1]);
+        out->dfts = 0.0;
+    }
+
+    if (pts.size() == 3) {
+        Tri t(pts[0], pts[1], pts[2]);
+        auto c = t.toCircle();
+
+        out->center_x = c.c.x;
+        out->center_y = c.c.y;
+        out->radius = c.r;
+        out->dfts = 0.0;
+    }
+
+    // Voronoi calculations
     jcv_point* points = 0;
     jcv_diagram diagram;
 
@@ -81,7 +100,7 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     std::vector<Pt> hull;
     quickHull(pts, hull);
 
-    // Find all the voronoi vertices inside the hull
+    // Find all the voronoi vertices inside the hull (and optional bounding circle)
     std::unordered_set<Pt> seen_points;
     std::vector<Pt> candidate_centers;
     const jcv_edge* edges = jcv_diagram_get_edges(&diagram);
@@ -94,14 +113,16 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
         
         if (seen_points.find(p1) == seen_points.end()) {
             seen_points.insert(p1);
-            if (inPolygon(hull, p1)) {
+            if (inPolygon(hull, p1) &&
+                (boundingCircle ? (len(boundingCircle->c, p1) < boundingCircle->r) : true)) {
                 candidate_centers.push_back(p1);
             }
         }
 
         if (seen_points.find(p2) == seen_points.end()) {
             seen_points.insert(p2);
-            if (inPolygon(hull, p2)) {
+            if (inPolygon(hull, p2) &&
+                (boundingCircle ? (len(boundingCircle->c, p2) < boundingCircle->r) : true)) {
                 candidate_centers.push_back(p2);
             }
         }
@@ -109,10 +130,10 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
         edges = jcv_diagram_get_next_edge(edges);
     }
 
-    // std::cout << "Candidate centers:\n";
-    // for (auto p : candidate_centers) {
-    //     std::cout << p << "\n";
-    // }
+    std::cout << "Candidate centers:\n";
+    for (auto p : candidate_centers) {
+        std::cout << p << "\n";
+    }
 
     // Where voronoi edges cross the hull are also potential MICs
     // TODO: for(...)
@@ -126,8 +147,8 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
         Tri t = threeClosestPoints(plist, p);
         Circ c = t.toCircle();
 
-        // std::cout << "centers match? " << p << " >< " << c.c << "\n";
-        // std::cout << "Tri: " << t.p1 << " " << t.p2 << " " << t.p3 << "\n";
+        std::cout << "centers match? " << p << " >< " << c.c << "\n";
+        std::cout << "Tri: " << t.p1 << " " << t.p2 << " " << t.p3 << "\n";
 
         if (c.r > biggest.r) {
             biggest = c;
@@ -141,12 +162,12 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out)
     jcv_diagram_free( &diagram );
 }
 
-void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out)
+void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out, std::shared_ptr<Circ> boundingCircle)
 {
     std::vector<Pt> vp;
 
     for (auto& p : pts) {
         vp.emplace_back(p);
     }
-    calculateMIC2(vp, out);
+    calculateMIC2(vp, out, boundingCircle);
 }

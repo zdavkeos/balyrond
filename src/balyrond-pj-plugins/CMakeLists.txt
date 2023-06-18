@@ -92,6 +92,8 @@ add_library(ToolboxRoundness SHARED
         ToolboxRoundness/mic.cpp
         ToolboxRoundness/mic2.h
         ToolboxRoundness/mic2.cpp
+        ToolboxRoundness/mcc.h
+        ToolboxRoundness/mcc.cpp
         ToolboxRoundness/geom.h
         ToolboxRoundness/geom.cpp
         ToolboxRoundness/lscf.h

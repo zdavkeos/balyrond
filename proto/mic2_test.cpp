@@ -1,6 +1,6 @@
 // Test mic2 (voronoi) code
 
-// clang++ --std=c++17 -o mic2 mic2_test.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/mic2.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/geom.cpp
+// clang++ --std=c++17 -g -o mic2 mic2_test.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/mic2.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/geom.cpp
 
 #include "../src/balyrond-pj-plugins/ToolboxRoundness/mic2.h"
 #include "../src/balyrond-pj-plugins/ToolboxRoundness/geom.h"

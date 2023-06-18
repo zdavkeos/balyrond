@@ -40,3 +40,8 @@ install/
 
 # vscode
 .vscode
+
+# lldb
+*.dSYM
+proto/mcc
+proto/mic2

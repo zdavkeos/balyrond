@@ -49,6 +49,16 @@ std::ostream& operator<<(std::ostream& os, Pt& p);
 
 std::ostream& operator<<(std::ostream& os, const Pt& p);
 
+void swap(Pt& lhs, Pt& rhs);
+
+template<> struct std::hash<Pt>
+{
+    std::size_t operator()(Pt const& p) const noexcept
+    {
+        return std::hash<double>{}(p.x) ^ std::hash<double>{}(p.y);
+    }
+};
+
 // The length of segment (a, b).
 float len(const Pt& a, const Pt& b);
 

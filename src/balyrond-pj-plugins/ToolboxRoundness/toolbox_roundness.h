@@ -56,7 +56,7 @@ private:
   PJ::PlotDataXY& curve_dist;
   PJ::PlotDataXY& curve_min;
   PJ::PlotDataXY& curve_max;
-  PJ::PlotDataXY& curve_avg;
+  PJ::PlotDataXY& curve_mcz;
   PJ::PlotDataXY& curve_lstsq;
 
   void calculateRoundness();

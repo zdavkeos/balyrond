@@ -17,9 +17,8 @@ typedef struct
 } MIC;
 
 // for testing
-Tri
-threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p);
+Tri threeClosestPoints(std::vector<std::reference_wrapper<Pt>> pts, Pt p);
 
-void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out);
+void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_ptr<Circ> boundingCircle = nullptr);
 
-void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out);
+void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out, std::shared_ptr<Circ> boundingCircle = nullptr);

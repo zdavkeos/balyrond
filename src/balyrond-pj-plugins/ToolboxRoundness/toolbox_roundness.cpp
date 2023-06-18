@@ -6,6 +6,7 @@
 
 #include "lscf.h"
 #include "mic2.h"
+#include "mcc.h"
 
 #include <QDialogButtonBox>
 #include <QEvent>
@@ -21,7 +22,7 @@
 
 ToolboxRoundness::ToolboxRoundness() :
   curve_dist(_local_data.getOrCreateScatterXY("distance_polar")),
-  curve_avg(_local_data.getOrCreateScatterXY("average_polar")),
+  curve_mcz(_local_data.getOrCreateScatterXY("mcz_polar")),
   curve_min(_local_data.getOrCreateScatterXY("min_polar")),
   curve_max(_local_data.getOrCreateScatterXY("max_polar")),
   curve_lstsq(_local_data.getOrCreateScatterXY("least_squares"))
@@ -133,7 +134,7 @@ void ToolboxRoundness::calculateRoundness()
     }
 
     curve_dist.clear();
-    curve_avg.clear();
+    curve_mcz.clear();
     curve_min.clear();
     curve_max.clear();
     curve_lstsq.clear();
@@ -156,15 +157,22 @@ void ToolboxRoundness::calculateRoundness()
 
     // Max Inscribed Circle
     auto mic = std::make_shared<MIC>();
-    calculateMIC2(pts, mic);
+
+     // center of MIC should be within the ls circle
+    auto boundry = std::make_shared<Circ>(Pt(lscf->center_x, lscf->center_y), lscf->radius);
+    calculateMIC2(pts, mic, boundry);
 
     std::cout << "MIC: " << mic->center_x << " " << mic->center_y << " " << mic->radius << " " << mic->dfts << "\n";
+
+    // Min Circumscribed Circle
+    auto mcc = std::make_shared<MCC>();
+    calculateMCC(pts, mcc);
 
     // create the circles for plotting
     for (double a = 0.0; a <= (2*M_PI); a += .1)
     {
         curve_max.pushBack({ mic->radius * ::cos(a) + mic->center_x, mic->radius * ::sin(a) + mic->center_y });
-        //curve_min.pushBack({ max * ::cos(a), max * ::sin(a) });
+        curve_min.pushBack({ mcc->radius * ::cos(a) + mcc->center_x, mcc->radius * ::sin(a) + mcc->center_y });
         curve_lstsq.pushBack({ lscf->radius * ::cos(a) + lscf->center_x, lscf->radius * ::sin(a) + lscf->center_y});
     }
 

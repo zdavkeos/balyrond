@@ -29,6 +29,17 @@ void Pt::operator=(Pt& other) {
     y = other.y;
 }
 
+void swap(Pt& lhs, Pt& rhs) {
+	double tx = lhs.x;
+	double ty = lhs.y;
+
+	lhs.x = rhs.x;
+	lhs.y = rhs.y;
+
+	rhs.x = tx;
+	rhs.y = ty;
+}
+
 double sqr(Pt& p) {
     return p.x*p.x + p.y*p.y;
 }
