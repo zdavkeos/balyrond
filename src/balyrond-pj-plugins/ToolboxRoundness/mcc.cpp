@@ -48,11 +48,11 @@ std::ostream &operator<<(std::ostream &out, Disc& d) {
 
 Disc Welzl(std::vector<Pt> p, Disc r)
 {
-    std::cout << "R: " << r << "\n";
-    std::cout << "P: ";
-    for (const auto& a : p) {
-        std::cout << a << " ";
-    }
+    // std::cout << "D: " << r << "\n";
+    // std::cout << "P: ";
+    // for (const auto& a : p) {
+    //     std::cout << a << " ";
+    // }
     std::cout << "\n\n";
 
     if (p.size() == 0 || r.pts.size() == 3) {
@@ -68,8 +68,8 @@ Disc Welzl(std::vector<Pt> p, Disc r)
         return d;
     }
 
-    d.pts.push_back(pp);
-    return Welzl(p, d);
+    r.pts.push_back(pp);
+    return Welzl(p, r);
 }
 
 void calculateMCC(std::vector<Pt>& pts, std::shared_ptr<MCC> out)
@@ -113,7 +113,7 @@ void calculateMCC(std::vector<Pt>& pts, std::shared_ptr<MCC> out)
     // Input points should be randomized
     std::shuffle(spts.begin(), spts.end(), std::default_random_engine());
 
-    Welzl(spts, mcc);
+    mcc = Welzl(spts, mcc);
 
     if (mcc.pts.size() == 3) {
         auto c = mcc.toCircle();

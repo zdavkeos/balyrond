@@ -69,6 +69,8 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
         out->center_y = pts[1].y - pts[0].y;
         out->radius = len(pts[0], pts[1]);
         out->dfts = 0.0;
+
+        return;
     }
 
     if (pts.size() == 3) {
@@ -79,6 +81,8 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
         out->center_y = c.c.y;
         out->radius = c.r;
         out->dfts = 0.0;
+
+        return;
     }
 
     // Voronoi calculations
@@ -108,8 +112,6 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
     {
         Pt p1(edges->pos[0].x, edges->pos[0].y);
         Pt p2(edges->pos[1].x, edges->pos[1].y);
-        std::cout << "Vor vertex: " << p1 << "\n";
-        std::cout << "Vor vertex: " << p2 << "\n";
         
         if (seen_points.find(p1) == seen_points.end()) {
             seen_points.insert(p1);
@@ -130,11 +132,6 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
         edges = jcv_diagram_get_next_edge(edges);
     }
 
-    std::cout << "Candidate centers:\n";
-    for (auto p : candidate_centers) {
-        std::cout << p << "\n";
-    }
-
     // Where voronoi edges cross the hull are also potential MICs
     // TODO: for(...)
 
@@ -146,9 +143,6 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
 
         Tri t = threeClosestPoints(plist, p);
         Circ c = t.toCircle();
-
-        std::cout << "centers match? " << p << " >< " << c.c << "\n";
-        std::cout << "Tri: " << t.p1 << " " << t.p2 << " " << t.p3 << "\n";
 
         if (c.r > biggest.r) {
             biggest = c;
