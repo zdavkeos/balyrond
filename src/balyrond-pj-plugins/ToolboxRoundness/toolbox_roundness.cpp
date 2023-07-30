@@ -44,7 +44,6 @@ ToolboxRoundness::ToolboxRoundness() :
 
   connect(ui->checkBox_MCC, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
   connect(ui->checkBox_MIC, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
-  connect(ui->checkBox_mean, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
   connect(ui->checkBox_lsc, &QCheckBox::toggled, this, &ToolboxRoundness::curvesToggled);
 }
 
@@ -139,11 +138,34 @@ void ToolboxRoundness::calculateRoundness()
     curve_max.clear();
     curve_lstsq.clear();
 
-    std::vector<std::tuple<double, double>> pts;
+    // get all the points in the selected region
+    std::vector<std::tuple<double, double>> data;
     for (size_t i = min_index; i <= max_index; i++)
     {
-        const auto& a = angle_data[i].y * (M_PI / 180.0);
+        const auto& a = angle_data[i].y;
         const auto& d = dist_data[i].y;
+
+        data.emplace_back(a, d);
+    }
+
+    // remove any points that make a line of 3 or more points
+    for (size_t i = 0; i < data.size(); i++)
+    {
+        double d = std::get<1>(data[i]);
+        while (i+2 < data.size() &&
+               std::get<1>(data[i+1]) == d &&
+               std::get<1>(data[i+2]) == d)
+        {
+          data.erase(data.begin() + i+1);
+        }
+    }
+
+    // convert to polar coords
+    std::vector<std::tuple<double, double>> pts;
+    for (const auto& p : data)
+    {
+        const auto& a = std::get<0>(p) * (M_PI / 180.0);
+        const auto& d = std::get<1>(p);
 
         double x = d * ::cos(a);
         double y = d * ::sin(a);
@@ -164,7 +186,7 @@ void ToolboxRoundness::calculateRoundness()
 
     std::cout << "MIC: " << mic->center_x << " " << mic->center_y << " " << mic->radius << " " << mic->dfts << "\n";
 
-    // Min Circumscribed Circle
+    // Min Circumscribed Circle (smallest enclosing disk)
     auto mcc = std::make_shared<MCC>();
     calculateMCC(pts, mcc);
 

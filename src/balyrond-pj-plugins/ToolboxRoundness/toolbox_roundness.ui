@@ -325,16 +325,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkBox_mean">
-            <property name="text">
-             <string>Mean Circle</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QCheckBox" name="checkBox_lsc">
             <property name="text">
              <string>Least Squares Circle</string>
@@ -428,13 +418,6 @@
            <property name="rightMargin">
             <number>0</number>
            </property>
-           <item>
-            <widget class="QLabel" name="label_10">
-             <property name="text">
-              <string>Mean Circle Diameter</string>
-             </property>
-            </widget>
-           </item>
            <item>
             <widget class="QLabel" name="label_avg">
              <property name="text">
