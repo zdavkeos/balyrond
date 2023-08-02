@@ -84,6 +84,20 @@ which is a bonus. Having Qt and qwt available plus access to several
 powerful OSS C++ libraries (Eigen, jc_voronoi, etc.) made for quick
 development.
 
+## Notes on the analysis algorithms
+
+There is considerable acedemic literature on the _theory_ of analyzing roundness and there is substantial engineering literature on how to _interpret_ the meaning of the roundness tests but there is very little information on _implementing_ the tests themselves. Part of my hope with this project is to share what I've learned and maybe offer some advice for others attempting to do the same. The reference implemntations for [MIC](src/balyrond-pj-plugins/ToolboxRoundness/mic2.cpp), [MCC](src/balyrond-pj-plugins/ToolboxRoundness/mcc.cpp), [MZC](src/balyrond-pj-plugins/ToolboxRoundness/mcz.cpp) and [Least Squares Fit](src/balyrond-pj-plugins/ToolboxRoundness/lscf.cpp) here are free and open for anyone interested.
+
+The easiest of the bunch (especially if you leverage [Eigen](https://eigen.tuxfamily.org/index.php?title=Main_Page)) is the Least Squares Fit. It is very robust and gives good bounds for the rest of the circle fitting algorithms. It finds the "best" circle that fits the data presented.
+
+For MIC I tried two approaches. The first [try](src/balyrond-pj-plugins/ToolboxRoundness/mic.cpp) was very promising but proved to be extremely brittle. It would pass the reference data with flying colors, but completely fall apart with real world data. The [second attempt](src/balyrond-pj-plugins/ToolboxRoundness/mic2.cpp) is much more robust. It is based on voronoi diagrams and seems to be preferred by those practicing in the field.
+
+The [MCC](src/balyrond-pj-plugins/ToolboxRoundness/mcc.cpp) algorithm is based on [Welzl's algorithm](https://en.wikipedia.org/wiki/Smallest-circle_problem) and seems to be the preferred approach in computational geomety circles. So far it seems to perform adequetely.
+
+[MCZ](src/balyrond-pj-plugins/ToolboxRoundness/mcz.cpp) is still a work in progess. Should we us gradient descent based on the Least Squares Fit? Or should we do a Least Squares Fit based on the area inside and outside the circle? Or maybe use the voronoi data we are already computing for the MIC fit?
+
+According to [NIST](https://tsapps.nist.gov/publication/get_pdf.cfm?pub_id=821955) (as I understand) the "best" approach is to start with the Least Squares Fit and then do gradient descent for the other three tests (MIC, MCC and MCC). I found the NIST papers after going on a bunch of tangents, but I want to at least bring up the idea here.
+
 ## Building the Plugins
 
 In general, follow the prerequisites for PlotJuggler.
