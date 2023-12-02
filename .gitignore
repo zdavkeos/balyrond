@@ -43,5 +43,9 @@ install/
 
 # lldb
 *.dSYM
+
+# test executables
 proto/mcc
 proto/mic2
+proto/hull
+proto/sim_anneal
