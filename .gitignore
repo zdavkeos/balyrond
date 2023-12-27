@@ -49,3 +49,4 @@ proto/mcc
 proto/mic2
 proto/hull
 proto/sim_anneal
+nist/baly_test

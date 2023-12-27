@@ -82,6 +82,7 @@
         "numeric": "cpp",
         "random": "cpp",
         "valarray": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "dense": "cpp"
     }
 }

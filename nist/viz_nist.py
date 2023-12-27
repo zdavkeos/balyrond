@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" Visualize the test data and solutions """
+""" Visualize the test data and solutions in 2D """
 
 import os
 import sys
