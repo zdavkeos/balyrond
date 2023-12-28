@@ -8,6 +8,7 @@
 #include <tuple>
 #include <vector>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 
 #include "../src/balyrond-pj-plugins/ToolboxRoundness/geom.h"
@@ -81,6 +82,7 @@ getSolution(int t, Sol& sol)
 
 int main(int argc, char** argv)
 {
+	constexpr double epsilon = 10e-2;
 
 	for (int i = 1; i <= 30; i++) {
 		std::vector<std::tuple<double, double>> pts;
@@ -89,19 +91,33 @@ int main(int argc, char** argv)
 		getData(i, pts);
 		getSolution(i, sol);
 
-		// std::cout << pts.size() << "\n";
-
 		std::shared_ptr<LSCF> lscf = std::make_shared<LSCF>();
 		leastSquaresCircleFit(pts, lscf);
 
-		std::cout << lscf->center_x << "\n" << lscf->center_y << "\n" << lscf->radius << "\n";
-
 		if ((int)sol.nx == 1) {
-			std::cout << sol.y << "\n" << sol.z << "\n" << sol.diam / 2.0 << "\n\n";
+			if (abs(lscf->center_x - sol.y) > epsilon ||
+				abs(lscf->center_y - sol.z) > epsilon ||
+				abs(lscf->radius - sol.diam / 2.0) > epsilon) {
+				std::cout << "Error in test " << i << "\n" << std::setprecision(9);
+				std::cout << lscf->center_x << "\n" << lscf->center_y << "\n" << lscf->radius << "\n";
+				std::cout << sol.y << "\n" << sol.z << "\n" << sol.diam / 2.0 << "\n\n";
+			}
 		} else if ((int)sol.ny == 1) {
-			std::cout << sol.x << "\n" << sol.z << "\n" << sol.diam / 2.0 << "\n\n";
+			if (abs(lscf->center_x - sol.x) > epsilon ||
+				abs(lscf->center_y - sol.z) > epsilon ||
+				abs(lscf->radius - sol.diam / 2.0) > epsilon) {
+				std::cout << "Error in test " << i << "\n" << std::setprecision(9);
+				std::cout << lscf->center_x << "\n" << lscf->center_y << "\n" << lscf->radius << "\n";
+				std::cout << sol.x << "\n" << sol.z << "\n" << sol.diam / 2.0 << "\n\n";
+			}
 		} else if ((int)sol.nz == 1) {
-			std::cout << sol.x << "\n" << sol.y << "\n" << sol.diam / 2.0 << "\n\n";
+			if (abs(lscf->center_x - sol.x) > epsilon ||
+				abs(lscf->center_y - sol.y) > epsilon ||
+				abs(lscf->radius - sol.diam / 2.0) > epsilon) {
+				std::cout << "Error in test " << i << "\n" << std::setprecision(9);
+				std::cout << lscf->center_x << "\n" << lscf->center_y << "\n" << lscf->radius << "\n";
+				std::cout << sol.x << "\n" << sol.y << "\n" << sol.diam / 2.0 << "\n\n";
+			}
 		}
 	}
 

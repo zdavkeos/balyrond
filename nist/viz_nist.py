@@ -57,10 +57,11 @@ for i in range(1, 31):
     d = get_data("Circle2d/Cir2d" + str(i) + ".ds")
     s = get_solution("Circle2d/Cir2d" + str(i) + ".fit")
 
-    ax.scatter(d[0], d[1])
+    ax.scatter(d[0], d[1], label="Test " + str(i))
 
     c = plt.Circle((s['x'], s['y']), s['d']/2.0, color='black', fill=False)
     ax.add_patch(c)
 
+ax.legend()
 plt.tight_layout()
 plt.show()
