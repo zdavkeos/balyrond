@@ -51,7 +51,6 @@ function run_fit_tests (data_fname, fit_fname)
     
 end
 
-run_fit_tests("Circle2d/Cir2d10.ds", "Circle2d/Cir2d10.fit");
 run_fit_tests("Circle2d/cir2d1.ds", "Circle2d/cir2d1.fit");
 run_fit_tests("Circle2d/cir2d10.ds", "Circle2d/cir2d10.fit");
 run_fit_tests("Circle2d/cir2d11.ds", "Circle2d/cir2d11.fit");

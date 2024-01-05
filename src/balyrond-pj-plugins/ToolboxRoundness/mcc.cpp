@@ -53,7 +53,7 @@ Disc Welzl(std::vector<Pt> p, Disc r)
     // for (const auto& a : p) {
     //     std::cout << a << " ";
     // }
-    std::cout << "\n\n";
+    //std::cout << "\n\n";
 
     if (p.size() == 0 || r.pts.size() == 3) {
         return r;

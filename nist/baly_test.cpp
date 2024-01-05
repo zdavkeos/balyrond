@@ -3,7 +3,7 @@
 
 // Test our algorithms against NIST's data
 
-// clang++ --std=c++17 -g -o baly_test baly_test.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/lscf.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/geom.cpp -I../src/balyrond-pj-plugins/ToolboxRoundness/eigen-3.4.0/
+// clang++ --std=c++17 -g -o baly_test baly_test.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/lscf.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/geom.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/mcc.cpp ../src/balyrond-pj-plugins/ToolboxRoundness/mic2.cpp -I../src/balyrond-pj-plugins/ToolboxRoundness/eigen-3.4.0/
 
 #include <tuple>
 #include <vector>
@@ -13,6 +13,8 @@
 
 #include "../src/balyrond-pj-plugins/ToolboxRoundness/geom.h"
 #include "../src/balyrond-pj-plugins/ToolboxRoundness/lscf.h"
+#include "../src/balyrond-pj-plugins/ToolboxRoundness/mic2.h"
+#include "../src/balyrond-pj-plugins/ToolboxRoundness/mcc.h"
 
 struct pt3d
 {
@@ -85,14 +87,28 @@ int main(int argc, char** argv)
 	constexpr double epsilon = 10e-2;
 
 	for (int i = 1; i <= 30; i++) {
+		std::cout << "\nTest: " << i << "\n";
+		
 		std::vector<std::tuple<double, double>> pts;
 		Sol sol;
 
-		getData(i, pts);
-		getSolution(i, sol);
+		getData(i, pts); // raw input points
+		getSolution(i, sol); // NIST solution
 
 		std::shared_ptr<LSCF> lscf = std::make_shared<LSCF>();
-		leastSquaresCircleFit(pts, lscf);
+		leastSquaresCircleFit(pts, lscf); // balyrond LSCF
+
+		auto mic = std::make_shared<MIC>();
+		// center of MIC should be within the ls circle
+		auto boundry = std::make_shared<Circ>(Pt(lscf->center_x, lscf->center_y), lscf->radius);
+		calculateMIC2(pts, mic, boundry);
+
+		auto mcc = std::make_shared<MCC>();
+		calculateMCC(pts, mcc);
+
+		std::cout << "MIC: " << mic->center_x << " " << mic->center_y << " " << mic->radius << "\n";
+		std::cout << "MCC: " << mcc->center_x << " " << mcc->center_y << " " << mcc->radius << "\n";
+		std::cout << "LSCF: " << lscf->center_x << " " << lscf->center_y << " " << lscf->radius << "\n";
 
 		if ((int)sol.nx == 1) {
 			if (abs(lscf->center_x - sol.y) > epsilon ||
