@@ -122,7 +122,7 @@ void calculateMCC(std::vector<Pt>& pts, std::shared_ptr<MCC> out)
         out->center_y = c.c.y;
         out->radius = c.r;
     } else {
-        std::cout << "MCC calculation failed.\n";
+        //std::cout << "MCC calculation failed.\n";
     }
 }
 

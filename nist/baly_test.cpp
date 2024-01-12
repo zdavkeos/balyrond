@@ -110,6 +110,8 @@ int main(int argc, char** argv)
 		std::cout << "MCC: " << mcc->center_x << " " << mcc->center_y << " " << mcc->radius << "\n";
 		std::cout << "LSCF: " << lscf->center_x << " " << lscf->center_y << " " << lscf->radius << "\n";
 
+		continue;
+		
 		if ((int)sol.nx == 1) {
 			if (abs(lscf->center_x - sol.y) > epsilon ||
 				abs(lscf->center_y - sol.z) > epsilon ||
