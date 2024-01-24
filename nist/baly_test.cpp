@@ -84,7 +84,7 @@ getSolution(int t, Sol& sol)
 
 int main(int argc, char** argv)
 {
-	constexpr double epsilon = 10e-2;
+	constexpr double epsilon = 10e-4;
 
 	for (int i = 1; i <= 30; i++) {
 		std::cout << "\nTest: " << i << "\n";

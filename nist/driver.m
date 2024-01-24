@@ -16,6 +16,15 @@ function run_fit_tests (data_fname, fit_fname)
 
     fclose(fid);
 
+    % Collapse to 2 dimensions
+    if M(1,1) == M(2,1)
+        M(:,1) = [];
+    elseif M(1, 2) == M(2,2)
+        M(:,2) = [];
+    else
+        M(:,3) = [];
+    end
+
     %[c, rad, f] = A_CL2IC(M);
     %printf("A_CL2IC (MIC) Calculated:\n");
     %printf("  Center: %f\n", c);

@@ -59,6 +59,7 @@ def get_nist_sols(test):
             elif abs(ny) > 0.0:
                 nist_lscfy = nist_lscfz
 
+            print(nist_micx, nist_micy, nist_micr, nist_mccx, nist_mccy, nist_mccr, nist_lscfx, nist_lscfy, nist_lscfr)
             return nist_micx, nist_micy, nist_micr, nist_mccx, nist_mccy, nist_mccr, nist_lscfx, nist_lscfy, nist_lscfr
 
 def get_baly_sols(test):
@@ -109,6 +110,7 @@ ax.add_patch(c)
 c = plt.Circle((baly_lscfx, baly_lscfy), baly_lscfr, color='indigo', fill=False, label="BALY LSCF")
 ax.add_patch(c)
 
+ax.set_aspect('equal', 'box')
 ax.legend()
 plt.tight_layout()
 plt.show()
