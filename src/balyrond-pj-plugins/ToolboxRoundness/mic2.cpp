@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 // Maximum Inscribed Circle (MIC) calculations
-// using delauney triangulation,
+// using delaunay triangulation,
 // voronoi diagram and convex hull
 // 
 
@@ -97,7 +97,7 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
 
     memset(&diagram, 0, sizeof(jcv_diagram));
 
-    // generate the Delauney and Voronoi diagrams
+    // generate the Delaunay and Voronoi diagrams
     jcv_diagram_generate(pts.size(), (const jcv_point*)points, NULL, NULL, &diagram);
 
     // Compute the convex hull
@@ -154,6 +154,7 @@ void calculateMIC2(std::vector<Pt>& pts, std::shared_ptr<MIC> out, std::shared_p
     out->radius = biggest.r;
 
     jcv_diagram_free( &diagram );
+    free(points);
 }
 
 void calculateMIC2(std::vector<std::tuple<double, double>>& pts, std::shared_ptr<MIC> out, std::shared_ptr<Circ> boundingCircle)
