@@ -106,6 +106,7 @@ int main(int argc, char** argv)
 		auto mcc = std::make_shared<MCC>();
 		calculateMCC(pts, mcc);
 
+		std::cout << std::setprecision(15);
 		std::cout << "MIC: " << mic->center_x << " " << mic->center_y << " " << mic->radius << "\n";
 		std::cout << "MCC: " << mcc->center_x << " " << mcc->center_y << " " << mcc->radius << "\n";
 		std::cout << "LSCF: " << lscf->center_x << " " << lscf->center_y << " " << lscf->radius << "\n";
