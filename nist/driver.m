@@ -27,18 +27,18 @@ function run_fit_tests (data_fname, fit_fname)
 
     %[c, rad, f] = A_CL2IC(M);
     %printf("A_CL2IC (MIC) Calculated:\n");
-    %printf("  Center: %f\n", c);
-    %printf("  Radius: %f\n", rad);
+    %printf("  Center: %.10f\n", c);
+    %printf("  Radius: %.10f\n", rad);
 
     [c, rad, f] = H_CL2IC(M);
     printf("H_CL2IC (MIC) Calculated:\n");
-    printf("  Center: %f\n", c);
-    printf("  Radius: %f\n", rad);
+    printf("  Center: %.10f\n", c);
+    printf("  Radius: %.10f\n", rad);
 
     [c, rad, f] = H_CL2CC(M);
     printf("H_CL2CC (MCC) Calculated:\n");
-    printf("  Center: %f\n", c);
-    printf("  Radius: %f\n", rad);
+    printf("  Center: %.10f\n", c);
+    printf("  Radius: %.10f\n", rad);
 
     % check the "official" solution
     fid = fopen(fit_fname);
@@ -51,10 +51,10 @@ function run_fit_tests (data_fname, fit_fname)
     diam = str2num(fgetl(fid));
 
     printf("Official Least Squares Fit:\n");
-    printf("  Center X: %f\n", xc);
-    printf("  Center Y: %f\n", yc);
-    printf("  Center Z: %f\n", zc);
-    printf("  Radius: %f\n\n", diam / 2);
+    printf("  Center X: %.10f\n", xc);
+    printf("  Center Y: %.10f\n", yc);
+    printf("  Center Z: %.10f\n", zc);
+    printf("  Radius: %.10f\n\n", diam / 2);
     printf("  Normal: %f %f %f\n", xn, yn, zn);
 
     

@@ -2,510 +2,510 @@ Running...
 ------------------------------------
 File: Circle2d/cir2d1.ds
 H_CL2IC (MIC) Calculated:
-  Center: -560.319594
-  Center: 34.240175
-  Radius: 13.159535
+  Center: -560.3195941805
+  Center: 34.2401754485
+  Radius: 13.1595354438
 H_CL2CC (MCC) Calculated:
-  Center: -560.315090
-  Center: 34.243913
-  Radius: 13.419134
+  Center: -560.3150904804
+  Center: 34.2439130591
+  Radius: 13.4191343190
 Official Least Squares Fit:
-  Center X: 811.298010
-  Center Y: -560.317727
-  Center Z: 34.239023
-  Radius: 13.290776
+  Center X: 811.2980100000
+  Center Y: -560.3177272525
+  Center Z: 34.2390233302
+  Radius: 13.2907756439
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d10.ds
 H_CL2IC (MIC) Calculated:
-  Center: -360.409325
-  Center: 271.300895
-  Radius: 2.699670
+  Center: -360.4093248242
+  Center: 271.3008948044
+  Radius: 2.6996699244
 H_CL2CC (MCC) Calculated:
-  Center: -360.409389
-  Center: 271.300351
-  Radius: 2.702653
+  Center: -360.4093888756
+  Center: 271.3003510808
+  Radius: 2.7026532955
 Official Least Squares Fit:
-  Center X: -360.409691
-  Center Y: 271.300586
-  Center Z: -302.139170
-  Radius: 2.701068
+  Center X: -360.4096912142
+  Center Y: 271.3005857125
+  Center Z: -302.1391700000
+  Radius: 2.7010683602
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d11.ds
 H_CL2IC (MIC) Calculated:
-  Center: 0.590513
-  Center: 0.835796
-  Radius: 0.861534
+  Center: 0.5905126918
+  Center: 0.8357957525
+  Radius: 0.8615336372
 H_CL2CC (MCC) Calculated:
-  Center: 0.590513
-  Center: 0.835796
-  Radius: 0.861540
+  Center: 0.5905126918
+  Center: 0.8357957525
+  Radius: 0.8615395788
 Official Least Squares Fit:
-  Center X: 0.590513
-  Center Y: 0.835796
-  Center Z: -0.535230
-  Radius: 0.861536
+  Center X: 0.5905126918
+  Center Y: 0.8357957525
+  Center Z: -0.5352300000
+  Radius: 0.8615363071
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d12.ds
 H_CL2IC (MIC) Calculated:
-  Center: -144.758132
-  Center: -451.372488
-  Radius: 33.492754
+  Center: -144.7581320976
+  Center: -451.3724878165
+  Radius: 33.4927539063
 H_CL2CC (MCC) Calculated:
-  Center: -144.785231
-  Center: -451.352025
-  Radius: 34.163959
+  Center: -144.7852313118
+  Center: -451.3520250409
+  Radius: 34.1639593477
 Official Least Squares Fit:
-  Center X: -144.775258
-  Center Y: 59.381810
-  Center Z: -451.369503
-  Radius: 33.816687
+  Center X: -144.7752575104
+  Center Y: 59.3818100000
+  Center Z: -451.3695028475
+  Radius: 33.8166871031
 
   Normal: 0.000000 -1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d13.ds
 H_CL2IC (MIC) Calculated:
-  Center: -20.651631
-  Center: -25.665862
-  Radius: 111.164701
+  Center: -20.6516308788
+  Center: -25.6658622581
+  Radius: 111.1647008186
 H_CL2CC (MCC) Calculated:
-  Center: -20.653367
-  Center: -25.664944
-  Radius: 111.274126
+  Center: -20.6533672794
+  Center: -25.6649439873
+  Radius: 111.2741263121
 Official Least Squares Fit:
-  Center X: 15.139700
-  Center Y: -20.653368
-  Center Z: -25.664945
-  Radius: 111.219397
+  Center X: 15.1397000000
+  Center Y: -20.6533675715
+  Center Z: -25.6649450944
+  Radius: 111.2193970261
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d14.ds
 H_CL2IC (MIC) Calculated:
-  Center: -1.564787
-  Center: 1.199486
-  Radius: 1.238732
+  Center: -1.5647873003
+  Center: 1.1994858403
+  Radius: 1.2387324224
 H_CL2CC (MCC) Calculated:
-  Center: -1.578910
-  Center: 1.202362
-  Radius: 1.252913
+  Center: -1.5789104188
+  Center: 1.2023619867
+  Radius: 1.2529130556
 Official Least Squares Fit:
-  Center X: -1.570934
-  Center Y: -0.268120
-  Center Z: 1.200421
-  Radius: 1.246517
+  Center X: -1.5709344151
+  Center Y: -0.2681200000
+  Center Z: 1.2004207498
+  Radius: 1.2465169477
 
   Normal: 0.000000 -1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d15.ds
 H_CL2IC (MIC) Calculated:
-  Center: -525.640504
-  Center: 377.331679
-  Radius: 19.137464
+  Center: -525.6405036917
+  Center: 377.3316788468
+  Radius: 19.1374639362
 H_CL2CC (MCC) Calculated:
-  Center: -525.698771
-  Center: 377.732658
-  Radius: 18.973914
+  Center: -525.6987707822
+  Center: 377.7326575942
+  Radius: 18.9739138943
 Official Least Squares Fit:
-  Center X: -525.637024
-  Center Y: 377.497848
-  Center Z: -117.245370
-  Radius: 19.115015
+  Center X: -525.6370240827
+  Center Y: 377.4978476948
+  Center Z: -117.2453700000
+  Radius: 19.1150151285
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d16.ds
 H_CL2IC (MIC) Calculated:
-  Center: -475.313387
-  Center: -249.546525
-  Radius: 21.044665
+  Center: -475.3133869814
+  Center: -249.5465253876
+  Radius: 21.0446651227
 H_CL2CC (MCC) Calculated:
-  Center: -475.314661
-  Center: -249.546137
-  Radius: 21.046817
+  Center: -475.3146611710
+  Center: -249.5461366564
+  Radius: 21.0468174787
 Official Least Squares Fit:
-  Center X: -68.966460
-  Center Y: -475.314373
-  Center Z: -249.546250
-  Radius: 21.045955
+  Center X: -68.9664600000
+  Center Y: -475.3143729117
+  Center Z: -249.5462502608
+  Radius: 21.0459545067
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d17.ds
 H_CL2IC (MIC) Calculated:
-  Center: -0.232524
-  Center: 0.787383
-  Radius: 0.703109
+  Center: -0.2325241410
+  Center: 0.7873827854
+  Radius: 0.7031093469
 H_CL2CC (MCC) Calculated:
-  Center: -0.228775
-  Center: 0.785968
-  Radius: 0.715915
+  Center: -0.2287751214
+  Center: 0.7859682101
+  Radius: 0.7159152951
 Official Least Squares Fit:
-  Center X: -0.230404
-  Center Y: 0.786328
-  Center Z: -0.679300
-  Radius: 0.708760
+  Center X: -0.2304041804
+  Center Y: 0.7863277517
+  Center Z: -0.6793000000
+  Radius: 0.7087604443
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d18.ds
 H_CL2IC (MIC) Calculated:
-  Center: -0.077046
-  Center: 0.002383
-  Radius: 1.628675
+  Center: -0.0770463096
+  Center: 0.0023826592
+  Radius: 1.6286751575
 H_CL2CC (MCC) Calculated:
-  Center: -0.076193
-  Center: 0.003622
-  Radius: 1.663225
+  Center: -0.0761928871
+  Center: 0.0036223678
+  Radius: 1.6632247860
 Official Least Squares Fit:
-  Center X: 0.009210
-  Center Y: -0.076603
-  Center Z: 0.003341
-  Radius: 1.646011
+  Center X: 0.0092100000
+  Center Y: -0.0766030333
+  Center Z: 0.0033408459
+  Radius: 1.6460112372
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d19.ds
 H_CL2IC (MIC) Calculated:
-  Center: 167.355029
-  Center: -600.366903
-  Radius: 22.864226
+  Center: 167.3550293320
+  Center: -600.3669034482
+  Radius: 22.8642262929
 H_CL2CC (MCC) Calculated:
-  Center: 167.359915
-  Center: -600.367145
-  Radius: 22.887440
+  Center: 167.3599145795
+  Center: -600.3671448883
+  Radius: 22.8874397201
 Official Least Squares Fit:
-  Center X: 752.527950
-  Center Y: 167.356808
-  Center Z: -600.366560
-  Radius: 22.875994
+  Center X: 752.5279500000
+  Center Y: 167.3568082361
+  Center Z: -600.3665596299
+  Radius: 22.8759935551
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d2.ds
 H_CL2IC (MIC) Calculated:
-  Center: -823.533708
-  Center: 419.682231
-  Radius: 3.938719
+  Center: -823.5337080358
+  Center: 419.6822308690
+  Radius: 3.9387185860
 H_CL2CC (MCC) Calculated:
-  Center: -823.531413
-  Center: 419.687511
-  Radius: 3.936798
+  Center: -823.5314130872
+  Center: 419.6875108141
+  Radius: 3.9367982656
 Official Least Squares Fit:
-  Center X: -823.531609
-  Center Y: -371.185970
-  Center Z: 419.685510
-  Radius: 3.936978
+  Center X: -823.5316085971
+  Center Y: -371.1859700000
+  Center Z: 419.6855095403
+  Radius: 3.9369775083
 
   Normal: 0.000000 -1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d20.ds
 H_CL2IC (MIC) Calculated:
-  Center: 3.741074
-  Center: 14.666503
-  Radius: 10.740376
+  Center: 3.7410735117
+  Center: 14.6665034819
+  Radius: 10.7403759765
 H_CL2CC (MCC) Calculated:
-  Center: 3.555079
-  Center: 14.638607
-  Radius: 10.838682
+  Center: 3.5550788784
+  Center: 14.6386071504
+  Radius: 10.8386815639
 Official Least Squares Fit:
-  Center X: 3.661931
-  Center Y: 8.533350
-  Center Z: 14.651118
-  Radius: 10.801930
+  Center X: 3.6619309663
+  Center Y: 8.5333500000
+  Center Z: 14.6511175075
+  Radius: 10.8019302819
 
   Normal: 0.000000 1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d21.ds
 H_CL2IC (MIC) Calculated:
-  Center: 445.608660
-  Center: -701.528676
-  Radius: 161.862071
+  Center: 445.6086604025
+  Center: -701.5286757781
+  Radius: 161.8620714220
 H_CL2CC (MCC) Calculated:
-  Center: 444.862249
-  Center: -700.997725
-  Radius: 165.899932
+  Center: 444.8622487399
+  Center: -700.9977249600
+  Radius: 165.8999318269
 Official Least Squares Fit:
-  Center X: 446.334021
-  Center Y: -702.281635
-  Center Z: -79.291760
-  Radius: 162.599100
+  Center X: 446.3340213909
+  Center Y: -702.2816346098
+  Center Z: -79.2917600000
+  Radius: 162.5990997705
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d22.ds
 H_CL2IC (MIC) Calculated:
-  Center: -600.509362
-  Center: -428.713435
-  Radius: 169.462360
+  Center: -600.5093622580
+  Center: -428.7134351928
+  Radius: 169.4623601410
 H_CL2CC (MCC) Calculated:
-  Center: -600.509362
-  Center: -428.713435
-  Radius: 169.462372
+  Center: -600.5093622580
+  Center: -428.7134351928
+  Radius: 169.4623721448
 Official Least Squares Fit:
-  Center X: -600.509362
-  Center Y: -428.713435
-  Center Z: 381.295240
-  Radius: 169.462366
+  Center X: -600.5093622581
+  Center Y: -428.7134351928
+  Center Z: 381.2952400000
+  Radius: 169.4623663610
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d23.ds
 H_CL2IC (MIC) Calculated:
-  Center: -132.376248
-  Center: 303.734602
-  Radius: 57.996305
+  Center: -132.3762484487
+  Center: 303.7346021183
+  Radius: 57.9963052224
 H_CL2CC (MCC) Calculated:
-  Center: -132.372103
-  Center: 303.742396
-  Radius: 58.023268
+  Center: -132.3721032161
+  Center: 303.7423964758
+  Radius: 58.0232683901
 Official Least Squares Fit:
-  Center X: -132.373372
-  Center Y: -38.087300
-  Center Z: 303.736797
-  Radius: 58.008875
+  Center X: -132.3733721505
+  Center Y: -38.0873000000
+  Center Z: 303.7367968797
+  Radius: 58.0088748001
 
   Normal: 0.000000 1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d24.ds
 H_CL2IC (MIC) Calculated:
-  Center: 231.280659
-  Center: 528.398648
-  Radius: 77.907541
+  Center: 231.2806594445
+  Center: 528.3986481375
+  Radius: 77.9075409151
 H_CL2CC (MCC) Calculated:
-  Center: 231.489707
-  Center: 528.386514
-  Radius: 77.779103
+  Center: 231.4897073821
+  Center: 528.3865137112
+  Radius: 77.7791028312
 Official Least Squares Fit:
-  Center X: 231.415380
-  Center Y: 528.404565
-  Center Z: -719.475300
-  Radius: 77.819289
+  Center X: 231.4153798967
+  Center Y: 528.4045654407
+  Center Z: -719.4753000000
+  Radius: 77.8192888036
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d25.ds
 H_CL2IC (MIC) Calculated:
-  Center: -8.719941
-  Center: 3.182413
-  Radius: 6.245104
+  Center: -8.7199411267
+  Center: 3.1824134505
+  Radius: 6.2451038847
 H_CL2CC (MCC) Calculated:
-  Center: -8.722956
-  Center: 3.192058
-  Radius: 6.291152
+  Center: -8.7229560692
+  Center: 3.1920580376
+  Radius: 6.2911524025
 Official Least Squares Fit:
-  Center X: -8.721504
-  Center Y: -1.971830
-  Center Z: 3.195663
-  Radius: 6.269420
+  Center X: -8.7215043393
+  Center Y: -1.9718300000
+  Center Z: 3.1956625713
+  Radius: 6.2694200856
 
   Normal: 0.000000 -1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d26.ds
 H_CL2IC (MIC) Calculated:
-  Center: 1.677119
-  Center: -5.855693
-  Radius: 17.983042
+  Center: 1.6771191975
+  Center: -5.8556932388
+  Radius: 17.9830417712
 H_CL2CC (MCC) Calculated:
-  Center: 1.664561
-  Center: -5.863544
-  Radius: 18.008796
+  Center: 1.6645612401
+  Center: -5.8635435649
+  Radius: 18.0087961055
 Official Least Squares Fit:
-  Center X: 1.671059
-  Center Y: 10.196440
-  Center Z: -5.855256
-  Radius: 17.992522
+  Center X: 1.6710592794
+  Center Y: 10.1964400000
+  Center Z: -5.8552559805
+  Radius: 17.9925221077
 
   Normal: 0.000000 -1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d27.ds
 H_CL2IC (MIC) Calculated:
-  Center: -101.570733
-  Center: -52.865245
-  Radius: 146.473568
+  Center: -101.5707334579
+  Center: -52.8652448375
+  Radius: 146.4735683721
 H_CL2CC (MCC) Calculated:
-  Center: -101.595253
-  Center: -52.836851
-  Radius: 146.591596
+  Center: -101.5952532765
+  Center: -52.8368513384
+  Radius: 146.5915963195
 Official Least Squares Fit:
-  Center X: 17.778190
-  Center Y: -101.590701
-  Center Z: -52.864818
-  Radius: 146.530778
+  Center X: 17.7781900000
+  Center Y: -101.5907009295
+  Center Z: -52.8648182966
+  Radius: 146.5307781899
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d28.ds
 H_CL2IC (MIC) Calculated:
-  Center: -13.079082
-  Center: 12.120157
-  Radius: 46.750914
+  Center: -13.0790822930
+  Center: 12.1201566501
+  Radius: 46.7509137563
 H_CL2CC (MCC) Calculated:
-  Center: -12.423684
-  Center: 11.476036
-  Radius: 47.094487
+  Center: -12.4236842218
+  Center: 11.4760364325
+  Radius: 47.0944869566
 Official Least Squares Fit:
-  Center X: -12.776137
-  Center Y: 5.350060
-  Center Z: 11.793231
-  Radius: 46.938102
+  Center X: -12.7761373244
+  Center Y: 5.3500600000
+  Center Z: 11.7932307527
+  Radius: 46.9381019198
 
   Normal: 0.000000 1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d29.ds
 H_CL2IC (MIC) Calculated:
-  Center: -924.090137
-  Center: 354.052651
-  Radius: 1.983356
+  Center: -924.0901366001
+  Center: 354.0526508511
+  Radius: 1.9833555425
 H_CL2CC (MCC) Calculated:
-  Center: -924.090171
-  Center: 354.052281
-  Radius: 1.985720
+  Center: -924.0901709765
+  Center: 354.0522807282
+  Radius: 1.9857198346
 Official Least Squares Fit:
-  Center X: -924.090137
-  Center Y: 354.052651
-  Center Z: 129.369990
-  Radius: 1.984632
+  Center X: -924.0901366062
+  Center Y: 354.0526509091
+  Center Z: 129.3699900000
+  Radius: 1.9846324036
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d3.ds
 H_CL2IC (MIC) Calculated:
-  Center: -9.416286
-  Center: 86.905796
-  Radius: 179.859493
+  Center: -9.4162861192
+  Center: 86.9057960573
+  Radius: 179.8594930823
 H_CL2CC (MCC) Calculated:
-  Center: -9.259327
-  Center: 86.752673
-  Radius: 182.002524
+  Center: -9.2593267937
+  Center: 86.7526732136
+  Radius: 182.0025240720
 Official Least Squares Fit:
-  Center X: -104.399140
-  Center Y: -9.248928
-  Center Z: 86.822929
-  Radius: 180.984827
+  Center X: -104.3991400000
+  Center Y: -9.2489280816
+  Center Z: 86.8229294480
+  Radius: 180.9848273815
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d30.ds
 H_CL2IC (MIC) Calculated:
-  Center: -18.461783
-  Center: 23.414057
-  Radius: 28.545547
+  Center: -18.4617828439
+  Center: 23.4140565392
+  Radius: 28.5455469438
 H_CL2CC (MCC) Calculated:
-  Center: -18.467514
-  Center: 23.441444
-  Radius: 29.192701
+  Center: -18.4675142038
+  Center: 23.4414438827
+  Radius: 29.1927010059
 Official Least Squares Fit:
-  Center X: -18.468283
-  Center Y: 23.453263
-  Center Z: 2.695400
-  Radius: 28.875767
+  Center X: -18.4682830745
+  Center Y: 23.4532631294
+  Center Z: 2.6954000000
+  Radius: 28.8757666452
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d4.ds
 H_CL2IC (MIC) Calculated:
-  Center: 627.174847
-  Center: 326.610220
-  Radius: 2.477450
+  Center: 627.1748466654
+  Center: 326.6102196329
+  Radius: 2.4774496728
 H_CL2CC (MCC) Calculated:
-  Center: 627.178968
-  Center: 326.609387
-  Radius: 2.516081
+  Center: 627.1789675037
+  Center: 326.6093869564
+  Radius: 2.5160806798
 Official Least Squares Fit:
-  Center X: -289.263200
-  Center Y: 627.176654
-  Center Z: 326.616670
-  Radius: 2.497407
+  Center X: -289.2632000000
+  Center Y: 627.1766544272
+  Center Z: 326.6166704861
+  Radius: 2.4974072823
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d5.ds
 H_CL2IC (MIC) Calculated:
-  Center: -803.365527
-  Center: -483.889115
-  Radius: 3.565654
+  Center: -803.3655274678
+  Center: -483.8891150231
+  Radius: 3.5656544778
 H_CL2CC (MCC) Calculated:
-  Center: -803.414470
-  Center: -483.915536
-  Radius: 3.592263
+  Center: -803.4144700010
+  Center: -483.9155356720
+  Radius: 3.5922628569
 Official Least Squares Fit:
-  Center X: -803.387606
-  Center Y: -178.730050
-  Center Z: -483.898360
-  Radius: 3.583337
+  Center X: -803.3876055009
+  Center Y: -178.7300500000
+  Center Z: -483.8983598043
+  Radius: 3.5833369828
 
   Normal: 0.000000 1.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d6.ds
 H_CL2IC (MIC) Calculated:
-  Center: -104.537226
-  Center: -202.362491
-  Radius: 79.799182
+  Center: -104.5372256497
+  Center: -202.3624914835
+  Radius: 79.7991823246
 H_CL2CC (MCC) Calculated:
-  Center: -104.535558
-  Center: -202.364684
-  Radius: 79.893806
+  Center: -104.5355582825
+  Center: -202.3646838802
+  Radius: 79.8938063130
 Official Least Squares Fit:
-  Center X: -104.534076
-  Center Y: -202.364491
-  Center Z: -867.202680
-  Radius: 79.847124
+  Center X: -104.5340760516
+  Center Y: -202.3644914320
+  Center Z: -867.2026800000
+  Radius: 79.8471238423
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d7.ds
 H_CL2IC (MIC) Calculated:
-  Center: -265.298187
-  Center: -378.628561
-  Radius: 1.094714
+  Center: -265.2981866219
+  Center: -378.6285610127
+  Radius: 1.0947141787
 H_CL2CC (MCC) Calculated:
-  Center: -265.298187
-  Center: -378.628561
-  Radius: 1.095075
+  Center: -265.2981866219
+  Center: -378.6285610127
+  Radius: 1.0950748020
 Official Least Squares Fit:
-  Center X: -63.071490
-  Center Y: -265.298186
-  Center Z: -378.628562
-  Radius: 1.094928
+  Center X: -63.0714900000
+  Center Y: -265.2981862386
+  Center Z: -378.6285615240
+  Radius: 1.0949282144
 
   Normal: 1.000000 0.000000 0.000000
 ------------------------------------
 File: Circle2d/cir2d8.ds
 H_CL2IC (MIC) Calculated:
-  Center: -130.367494
-  Center: 144.349958
-  Radius: 6.439638
+  Center: -130.3674942513
+  Center: 144.3499575061
+  Radius: 6.4396382728
 H_CL2CC (MCC) Calculated:
-  Center: -130.367053
-  Center: 144.348081
-  Radius: 6.443792
+  Center: -130.3670534862
+  Center: 144.3480814888
+  Radius: 6.4437918503
 Official Least Squares Fit:
-  Center X: -130.367016
-  Center Y: 144.349231
-  Center Z: 794.451690
-  Radius: 6.441883
+  Center X: -130.3670158388
+  Center Y: 144.3492309598
+  Center Z: 794.4516900000
+  Radius: 6.4418831888
 
   Normal: 0.000000 0.000000 1.000000
 ------------------------------------
 File: Circle2d/cir2d9.ds
 H_CL2IC (MIC) Calculated:
-  Center: 96.091102
-  Center: 85.689390
-  Radius: 20.905861
+  Center: 96.0911018088
+  Center: 85.6893900804
+  Radius: 20.9058610521
 H_CL2CC (MCC) Calculated:
-  Center: 96.091102
-  Center: 85.689390
-  Radius: 20.905861
+  Center: 96.0911018088
+  Center: 85.6893900804
+  Radius: 20.9058610521
 Official Least Squares Fit:
-  Center X: 96.091102
-  Center Y: 85.689390
-  Center Z: 73.366770
-  Radius: 20.905861
+  Center X: 96.0911018088
+  Center Y: 85.6893900804
+  Center Z: 73.3667700000
+  Radius: 20.9058610521
 
   Normal: 0.000000 0.000000 1.000000
